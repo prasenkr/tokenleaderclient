@@ -1,7 +1,7 @@
 # tokenleader-client
 
 thoughts about  functionallities
-okenleader-client
+tokenleader-client
 -----------------
 reads credentials from  /etc/tokenleader.yml  , also have auth_url = token_leader_url 
 sends these credential to token leader to get token
@@ -17,3 +17,4 @@ should support https and certificates
 python-pkg with cli facility for getting token
 it should be a dependency  pkg to other microservices
 other microsrrvies should be able to import and use it 
+
