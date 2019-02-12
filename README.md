@@ -50,11 +50,13 @@ then from python shell it works as follows
 thoughts about  functionallities
 tokenleader-client
 -----------------
-reads credentials from  /etc/tokenleader.yml  , also have auth_url = token_leader_url 
-sends these credential to token leader to get token
-use session ?
 
-accepts token as  python parameter and also from cli and sends it to tokenleader for verifiaction
+1) integrate rbac inside the client
+2) make the client an installable pkg 
+3) extend user creation/ catalog creation  etc. as part of the client  
+4) develop client for micros1  - which will make it easier to understand how  other microservice  should be developed keeping token leader in mind.  Target one week.
+
+
 if expired token , should read the users credentials from file and get a fresh token
 returns verification result 
 
