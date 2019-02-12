@@ -1,10 +1,10 @@
+import os
 import unittest
-from configs import config_handler 
+from configs.config_handler import Configs
 # from client.client import Client
 from configs.pwd_handler import generate_auth_file_with_encrypted_pwd
 
-all_config =config_handler.get_configs_chains_from_yml('tests/testdata/test_general_configs.yml') # send a test yml file from testdata
-private_key_filename = all_config.get('fernet_key_file')
+conf =Configs('tests/testdata/test_general_configs.yml') # send a test yml file from testdata
 
 tl_user = 'user1'
 tl_pwd = 'user1'
@@ -16,15 +16,14 @@ class TestConfigs(unittest.TestCase):
     
     
     def test_generate_auth_file_with_encrypted_pwd(self):
-        generate_auth_file_with_encrypted_pwd('configs/secret.txt', private_key_filename,
-                                          tl_user, tl_pwd, tl_url )
-    
-    def test_get_auth_configs(self):
-        r =getconfig.get_auth_configs('tests/testdata/test_general_configs.yml') # send a test yml file from testdata
-        #print(r)
-        self.assertTrue(isinstance(r, dict))        
-        self.assertTrue(k in r for k in ('password' ,'username', 'tokenleader_url'))
+        conf.generate_user_auth_file(tl_user, tl_pwd, tl_url )
+        self.assertTrue(os.path.exists('tests/testdata/test_general_configs.yml'))
         
+    def test_get_user_auth_info(self):
+        conf.get_user_auth_info()
+        self.assertTrue((conf.tl_password , conf.tl_user, conf.tl_url) == (tl_pwd, tl_user, tl_url))
+    
+         
     def test_get_token_method(self):        
         r1 = TLClient.get_token()
         self.assertTrue(isinstance(r1, dict))        
