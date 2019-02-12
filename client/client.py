@@ -2,18 +2,18 @@ import requests
 import json
 import jwt
 
-# from client.getconfig import get_auth_configs
+from configs.config_handler import Configs
 
-auth_config = get_auth_configs()
 
-class Client():
+class Client():   
      
-    def __init__(self, auth_config):
-        self.auth_config = auth_config
-        self.tl_username = self.auth_config.get('username')
-        self.tl_password = self.auth_config.get('password')
-        self.tl_url = self.auth_config.get('tokenleader_url')
-        self.tokenleader_public_key = self.auth_config.get('tokenleader_public_key') 
+    def __init__(self , conf_file='configs/general_configs.yml'):  
+        self.conf =Configs(conf_file)      
+        self.auth_config = self.conf.get_user_auth_info()
+        self.tl_username = self.auth_config.tl_user
+        self.tl_password = self.auth_config.tl_password
+        self.tl_url = self.auth_config.tl_url
+        self.tokenleader_public_key = self.auth_config.public_key
         
 
     def get_token(self):

@@ -63,7 +63,7 @@ class Configs():
             msg = ("file already exists, delete this file first to generate a new one")
             
         print(msg)
-        return msg
+        return self
         
     
     def  get_fernet_cipher_from_keyfile(self, keyfilepath):        
@@ -93,7 +93,7 @@ class Configs():
         byte_decrpted_text = cipher_suite.decrypt(byte_encrpted_text)
         clear_decrypted_text = bytes(byte_decrpted_text).decode("utf-8")
         self.tl_password = clear_decrypted_text
-        return msg
+        return self
     
     
     

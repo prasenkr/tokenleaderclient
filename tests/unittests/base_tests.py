@@ -1,19 +1,16 @@
 import os
 import unittest
 from configs.config_handler import Configs
-# from client.client import Client
-from configs.pwd_handler import generate_auth_file_with_encrypted_pwd
+from client.client import Client
 
-conf =Configs('tests/testdata/test_general_configs.yml') # send a test yml file from testdata
-
+settings_file = 'tests/testdata/test_general_configs.yml'
 tl_user = 'user1'
 tl_pwd = 'user1'
-tl_url  =  'localhost:5001'
-# TLClient = Client(auth_config)
+tl_url  =  'http://localhost:5001'
+TLClient = Client(settings_file)     
 
 
 class TestConfigs(unittest.TestCase):
-    
     
     def test_generate_auth_file_with_encrypted_pwd(self):
         conf.generate_user_auth_file(tl_user, tl_pwd, tl_url )
@@ -24,7 +21,7 @@ class TestConfigs(unittest.TestCase):
         self.assertTrue((conf.tl_password , conf.tl_user, conf.tl_url) == (tl_pwd, tl_user, tl_url))
     
          
-    def test_get_token_method(self):        
+    def test_get_token_method(self):           
         r1 = TLClient.get_token()
         self.assertTrue(isinstance(r1, dict))        
         self.assertTrue(k in r for k in ('auth_token' ,'service_catalog', 'status'))   
