@@ -9,27 +9,19 @@ class Configs():
     tl_user = ''
     tl_password = ''
     tl_url = ''
-    
+        
     def __init__(self, config_file):
+#         if self.general_config['user_auth_info_from'] == 'file': 
         self.config_file = config_file
         self.general_config = self.parse_yml(self.config_file)
         self.fernet_key_file =  self.general_config['fernet_key_file']
         self.user_auth_info_file_location = self.general_config['user_auth_info_file_location'] 
-        if self.general_config['user_auth_info_from'] == 'file':
-            if self.general_config.get('private_key_file_location') == 'default':
-                self.private_key_filename = os.path.expanduser('~/.ssh/id_rsa')
-            else:
-                self.private_key_filename = self.general_config.get('private_key_file_location')
-                
-            if self.general_config.get('public_key_file_location') == 'default':
-                self.public_key_filename = os.path.expanduser('~/.ssh/id_rsa.pub')
-            else:
-                self.public_key_filename = self.general_config.get('public_key_file_location')
-            
-            with open(self.private_key_filename, 'r') as f:
-                self.private_key = f.read()
-            with open(self.public_key_filename, 'r') as f:
-                    self.public_key = f.read()   
+        with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
+                self.public_key = f.read() 
+        if self.general_config['tl_public_key']:
+            self.tl_public_key = self.general_config['tl_public_key']
+        else:
+            self.tl_public_key =  self.public_key
                     
                     
     def parse_yml(self, file):

@@ -13,7 +13,7 @@ class Client():
         self.tl_username = self.auth_config.tl_user
         self.tl_password = self.auth_config.tl_password
         self.tl_url = self.auth_config.tl_url
-        self.tokenleader_public_key = self.auth_config.public_key
+        self.tokenleader_public_key = self.auth_config.tl_public_key
         
 
     def get_token(self):
@@ -37,9 +37,8 @@ class Client():
         return r_dict
     
         
-    def verify_token(self, token):          
-         
-        print(self.tokenleader_public_key)  
+    def verify_token(self, token): 
+        #print(self.tokenleader_public_key)  
         payload = self._decrypt_n_verify_token(token, self.tokenleader_public_key)    
         if payload == "Signature expired. Please log in again." :
             status = "Signature expired"
