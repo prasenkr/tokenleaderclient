@@ -7,5 +7,5 @@ setup(name='tokenleader_client',
       author='Bhujay Kumar Bhatta',
       author_email='bhujay.bhatta@yahoo.com',
       license='MIT',
-      packages=['tokenleader_client'],
+      packages=['tokenleader-client'],
       zip_safe=False)
