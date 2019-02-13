@@ -2,13 +2,16 @@ import requests
 import json
 import jwt
 
-from configs.config_handler import Configs
+from tokenleaderclient.configs.config_handler import Configs
 
 
 class Client():   
      
-    def __init__(self , conf_file='configs/general_configs.yml'):  
-        self.conf =Configs(conf_file)      
+    def __init__(self , conf_file=None):
+        if  conf_file:
+            self.conf =Configs(conf_file)
+        else:
+            self.conf =Configs()     
         self.auth_config = self.conf.get_user_auth_info()
         self.tl_username = self.auth_config.tl_user
         self.tl_password = self.auth_config.tl_password

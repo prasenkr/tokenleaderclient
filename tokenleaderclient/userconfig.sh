@@ -15,7 +15,7 @@ apppath = (os.path.join(possible_topdir,
 
 sys.path.insert(0, apppath)
 
-from configs.cli_config import main
+from tokenleaderclient.configs.cli_config import main
 
 if __name__ == '__main__':
 	main()

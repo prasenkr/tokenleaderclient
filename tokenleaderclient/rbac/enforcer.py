@@ -4,12 +4,12 @@ import requests
 import json
 import functools
 
-from rbac.policy import load_service_access_policy 
-from rbac.policy import load_role_to_acl_map
-from rbac.wfc import WorkFuncContext
-from  client.client import Client 
+from tokenleaderclient.rbac.policy import load_service_access_policy 
+from tokenleaderclient.rbac.policy import load_role_to_acl_map
+from tokenleaderclient.rbac.wfc import WorkFuncContext
+from  tokenleaderclient.client.client import Client 
 
-role_acl_map_file_prod_settings='acl/role_to_acl_map.yml'
+role_acl_map_file_prod_settings='tokenleaderclient/acl/role_to_acl_map.yml'
 WFC = WorkFuncContext()
 tl_client = Client()
 
@@ -24,8 +24,8 @@ def get_token():
     return token_received   # we need to handle auth faliure 
 
 
-def verify_token(token, auth_endpoint):
-    r_dict = tl_client.verify_token()
+def verify_token(token):
+    r_dict = tl_client.verify_token(token)
     return r_dict
 
 
@@ -41,7 +41,7 @@ def extract_token_data_from_api_request(verifed_token=None):
                               is not present in the  request header \n")
         else:
             #auth_token = fdata['auth_token']
-            token_verification_result = verify_token(auth_token, auth_url) 
+            token_verification_result = verify_token(auth_token) 
     else:
         if isinstance(verifed_token, dict):
             token_verification_result =   verifed_token

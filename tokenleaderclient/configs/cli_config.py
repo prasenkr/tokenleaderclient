@@ -10,13 +10,13 @@ possible_topdir = os.path.normpath(os.path.join(os.path.abspath(sys.argv[0]),
                                                 os.pardir,
                                                 os.pardir))
 apppath = (os.path.join(possible_topdir,
-                               'tokenleader-client',
-                               'configs'))
+                               'tokenleaderclient',
+                               'tokenleaderclient'))
 
 sys.path.insert(0, apppath)
 
-from configs.config_handler import Configs
-conf =Configs('configs/general_configs.yml')
+from tokenleaderclient.configs.config_handler import Configs
+conf =Configs()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--username', 

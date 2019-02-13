@@ -2,6 +2,7 @@ import yaml
 import os
 from cryptography.fernet import Fernet
 import configparser
+import six
 
 
 class Configs():
@@ -10,12 +11,19 @@ class Configs():
     tl_password = ''
     tl_url = ''
         
-    def __init__(self, config_file):
+    def __init__(self, config_file='/etc/tlclient/general_configs.yml'):
 #         if self.general_config['user_auth_info_from'] == 'file': 
+        if not os.path.exists(config_file):
+            print("you need to use tlconfig command to create a config file "
+                  "first in {} , if the file is in other location give the "
+                  "filename with path as parameter to Config or Client "
+                  "initialization".format(config_file))
         self.config_file = config_file
         self.general_config = self.parse_yml(self.config_file)
-        self.fernet_key_file =  self.general_config['fernet_key_file']
-        self.user_auth_info_file_location = self.general_config['user_auth_info_file_location'] 
+        self.fernet_key_file =  os.path.expanduser(
+            self.general_config['fernet_key_file'])
+        self.user_auth_info_file_location = os.path.expanduser(
+            self.general_config['user_auth_info_file_location']) 
         with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
                 self.public_key = f.read() 
         if self.general_config['tl_public_key']:
@@ -38,7 +46,11 @@ class Configs():
         Also stores encrypted password. user should use a cli utility to call this method to generate 
         the file
         '''
-        if not  os.path.exists(self.user_auth_info_file_location): 
+        filepath =  os.path.expanduser(self.user_auth_info_file_location)
+        dirpath = os.path.dirname(filepath)
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath)            
+        if not  os.path.exists(filepath): 
             cipher_suite = self.get_fernet_cipher_from_keyfile(self.fernet_key_file)
             byte_password = tl_pwd.encode("utf-8")
             encrypted_password = cipher_suite.encrypt(byte_password)
@@ -48,31 +60,37 @@ class Configs():
             config["DEFAULT"]['tl_url'] = tl_url
             config["DEFAULT"]['tl_password'] = encrypted_password_text 
             print ('creating file % s' % self.user_auth_info_file_location)
-            with open(self.user_auth_info_file_location, 'w') as f:
+            with open(filepath, 'w') as f:
                 config.write(f)  
-                msg =  ("file has been generated")
+                msg =  ("file {} has been generated".format(filepath))
         else:
-            msg = ("file already exists, delete this file first to generate a new one")
+            msg = ("file {} already exists, delete this file first to generate a new one".format(filepath))
             
         print(msg)
         return self
         
     
-    def  get_fernet_cipher_from_keyfile(self, keyfilepath):        
+    def  get_fernet_cipher_from_keyfile(self, keyfilepath):
+        filepath =  os.path.expanduser(keyfilepath)
+        dirpath = os.path.dirname(filepath)
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath)        
         if not  os.path.exists(keyfilepath):
             key = Fernet.generate_key()
-            with open(keyfilepath, 'wb') as f:
+            with open(filepath, 'wb') as f:
                 f.write(key)
         
-        with open(keyfilepath, 'rb') as f:
+        with open(filepath, 'rb') as f:
            file_content = f.readline()        
            cipher_suite = Fernet(file_content)        
            return cipher_suite
        
     def get_user_auth_info(self):         
         config = configparser.ConfigParser()
+        filepath =  os.path.expanduser(self.user_auth_info_file_location)
+        print(filepath)
         try:            
-            config.read(self.user_auth_info_file_location)            
+            config.read(filepath)            
             self.tl_user = config['DEFAULT']['tl_user']           
             self.tl_url = config["DEFAULT"]['tl_url']
             encrpted_text_from_file = config["DEFAULT"]['tl_password']                  
