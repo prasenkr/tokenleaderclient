@@ -9,7 +9,9 @@ from tokenleaderclient.rbac.policy import load_role_to_acl_map
 from tokenleaderclient.rbac.wfc import WorkFuncContext
 from  tokenleaderclient.client.client import Client 
 
-role_acl_map_file_prod_settings='tokenleaderclient/acl/role_to_acl_map.yml'
+#TODO:  This file should be read from  configuration settings 
+role_acl_map_file_prod_settings='/etc/tokenleaderclient/role_to_acl_map.yml'
+
 WFC = WorkFuncContext()
 tl_client = Client()
 
@@ -37,8 +39,11 @@ def extract_token_data_from_api_request(verifed_token=None):
         auth_token = flask.request.headers.get('X-Auth-Token')
         if not auth_token :
             #flask.abort(404)
-            return ("This end point need authentication, 'X-Auth-Token' key \n \
-                              is not present in the  request header \n")
+            msg = ("This end point  need authentication, 'X-Auth-Token' "
+                   "key is not present in the  request header \n")
+            token_verification_result['message'] = msg
+            token_verification_result['status'] = "Token verification failed"
+            
         else:
             #auth_token = fdata['auth_token']
             token_verification_result = verify_token(auth_token) 
@@ -47,6 +52,7 @@ def extract_token_data_from_api_request(verifed_token=None):
             token_verification_result =   verifed_token
         else: 
             token_verification_result['message']  = 'invalid token type' 
+            token_verification_result['status'] = "Token verification failed"
           
     return  token_verification_result    
    
@@ -106,6 +112,10 @@ def extract_roles_from_verified_token_n_compare_acl_map(rule_name, role_acl_map_
 
 def enforce_access_rule_with_token(rule_name, role_acl_map_file=role_acl_map_file_prod_settings,
                                     verified_token=None,):
+    '''
+    the original function  where you will apply this enforcer decorator 
+    must have a mandatory wfc  as its argument
+    '''
     def decorator(f):  
         @functools.wraps(f)
         def wrapper_function(*args, **kws):

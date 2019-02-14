@@ -7,13 +7,13 @@ def readme():
 
 
 setup(name='tokenleaderclient',
-      version='0.6',
+      version='0.61',
       description='Client for token based authentication and role based access control',
       long_description=readme(),
       url='https://github.com/microservice-tsp-billing/tokenleaderclient',
       author='Bhujay Kumar Bhatta',
       author_email='bhujay.bhatta@yahoo.com',
-      license='MIT',
+      license='Apache Software License',
       packages=find_packages(),
 #       package_data={
 #         # If any package contains *.txt or *.rst files, include them:

@@ -144,7 +144,7 @@ c. How  from the role authorization to the api route is done
 ===================================================================
 
 once users role is known , for admin role all checks are bypassed but for other roles  
-a search is performed in acl\role_to_acl_map.yml to check if agianst the role
+a search is performed in /etc/tokenleaderclient/role_to_acl_map.yml to check if agianst the role
 there is an entry for the api access method. The yml file entry is as below:
 - name: role1
   allow:
@@ -176,26 +176,42 @@ Future
 
 d. Work Function Context for further granular control of who can see what based on users work function
 ====================================================================================================
-
    Work function context for the user is also retrived from the token leader.
    The wfc is  passed to the api route function for later usage by 
    the function for database query filtering. 
    The api route function must have a keyword argument 'wfc'  for the enforcer decorator to work.
    
-   Example :
-    @bp1.route('/test1', methods=[ 'POST'])
-	@enforcer.enforce_access_rule_with_token('service1:first_api:rulename1', 
-	                                           role_acl_map_file, sample_token)
-	def acl_enforcer_func_for_test(wfc=None):
-	    msg = ("enforcer decorator working ok with wfc org = {},"
-	            "orgunit={}, dept={}".format(wfc.org, wfc.orgunit, wfc.department))
-	  
-	    return msg
+   Example :  
+ 
+	    @bp1.route('/test1', methods=[ 'POST'])
+		@authclient.enforce_access_rule_with_token(<'rulename'> )
+		def acl_enforcer_func_for_test(wfc=None):
+		'''
+		the rule name in this case should be :
+		'pkgname.modulename.classname.acl_enforcer_func_for_test'
+		for each api route functions the parameter wfc must be present
+		'''
+		    msg = ("enforcer decorator working ok with wfc org = {},"
+		            "orgunit={}, dept={}".format(wfc.org, wfc.orgunit, wfc.department))
+		  
+		    return msg
 	  
 In the above example, the decorator  impose aceess control on the route /test1 . 
 
 role name for the user  is retrived from the token leader , compared with the rule to acl map yml file 
-(role_acl_map_file) which is maintained locally in the server where the service is running .
+(/etc/tokenleaderclient/role_acl_map_file.yml) which is maintained locally in the server where the service is running .
+
+the role_to_acl_map file maps the  api route function names to and looks like :
+- name: role1
+  allow:
+  - pkgname.modulename1.acl_enforcer_func_for_test
+  - pkg1.module1.acl_enforcer_func_for_test
+ 
+ check the sample data  and test cases  inside the tokenleaderclient for better understanding.
+ tokenleader server ( this repo) it self uses  the tokenleader client for enforcing the rbac for 
+ many api routes , for example adding users , listing users etc. Check the 
+ tokenleader/app1/adminops/adminops_restapi.py file to get a better understanding or mail me
+ your query at bhujay.bhatta@yahoo.com
 
 decorator alos retrived work function context for the  user from tokenleader and passed it to 
 original route function acl_enforcer_func_for_test .   The route function mandatorily to have a 
