@@ -1,4 +1,4 @@
-#!../venv/bin/python
+#! venv/bin/python
 
 # -*- coding: utf-8 -*-
 
@@ -10,8 +10,8 @@ possible_topdir = os.path.normpath(os.path.join(os.path.abspath(sys.argv[0]),
                                                 os.pardir,
                                                 os.pardir))
 apppath = (os.path.join(possible_topdir,
-                               'tokenleader-client',
-                               'configs'))
+                               'tokenleaderclient',
+                               'tokenleaderclient'))
 
 sys.path.insert(0, apppath)
 

@@ -1,3 +1,15 @@
+change log 
+======================
+
+ver 0.63
+-----------------
+
+1. check for  presense of required  keys in /etc/tlclient/general_configs.yml   
+2. ssl_verify: False corrently this should be always False, cert verification can be introduced later based on reqirement.  
+3. ability to connect on https   when the  tokenleader url is https  in user_settings.ini   
+
+
+
 tokenleader-client
 =================================
 
@@ -13,6 +25,9 @@ the client has the folowing operations :
 -- verify the token and  retrieve users role and  wfc( work function context)
 
 -- provides an role based access control enforcer which can be bind to a flask api route  
+
+
+
  
 Installation:
 =================================================================

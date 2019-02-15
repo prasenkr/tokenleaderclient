@@ -17,8 +17,8 @@ possible_topdir = os.path.normpath(os.path.join(os.path.abspath(sys.argv[0]),
 #                                'app1',
 #                                '__init__.py')):
 apppath = (os.path.join(possible_topdir,
-                               'tokenleader',
-                               'tokenleader'))
+                               'tokenleaderclient',
+                               'tokenleaderclient'))
 #    sys.path.insert(0, apppath)
 
 sys.path.insert(0, apppath)

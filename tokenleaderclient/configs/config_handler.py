@@ -1,5 +1,6 @@
 import yaml
 import os
+import sys
 from cryptography.fernet import Fernet
 import configparser
 import six
@@ -10,6 +11,12 @@ class Configs():
     tl_user = ''
     tl_password = ''
     tl_url = ''
+    must_have_keys_in_yml = {'user_auth_info_from',
+                             'fernet_key_file', 
+                             'user_auth_info_file_location',
+                             'tl_public_key',
+                             'ssl_verify'
+                             }
         
     def __init__(self, config_file='/etc/tlclient/general_configs.yml'):
 #         if self.general_config['user_auth_info_from'] == 'file': 
@@ -18,18 +25,27 @@ class Configs():
                   "first in {} , if the file is in other location give the "
                   "filename with path as parameter to Config or Client "
                   "initialization".format(config_file))
-        self.config_file = config_file
-        self.general_config = self.parse_yml(self.config_file)
-        self.fernet_key_file =  os.path.expanduser(
-            self.general_config['fernet_key_file'])
-        self.user_auth_info_file_location = os.path.expanduser(
-            self.general_config['user_auth_info_file_location']) 
-        with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
-                self.public_key = f.read() 
-        if self.general_config['tl_public_key']:
-            self.tl_public_key = self.general_config['tl_public_key']
+            sys.exit()
         else:
-            self.tl_public_key =  self.public_key
+            self.config_file = config_file
+            self.general_config = self.parse_yml(self.config_file)
+#         print(self.general_config.keys()) 
+        if  self.general_config.keys() >= self.must_have_keys_in_yml:
+            self.fernet_key_file =  os.path.expanduser(
+                self.general_config['fernet_key_file'])
+            self.user_auth_info_file_location = os.path.expanduser(
+                self.general_config['user_auth_info_file_location']) 
+            with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
+                    self.public_key = f.read() 
+            if self.general_config['tl_public_key']:
+                self.tl_public_key = self.general_config['tl_public_key']
+            else:
+                self.tl_public_key =  self.public_key
+            self.ssl_verify = self.general_config['ssl_verify']
+        else:
+            print("{} file must have the following sections {}".format(
+                self.config_file, self.must_have_keys_in_yml ))
+            sys.exit()
                     
                     
     def parse_yml(self, file):

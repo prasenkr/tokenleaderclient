@@ -11,12 +11,14 @@ class Client():
         if  conf_file:
             self.conf =Configs(conf_file)
         else:
-            self.conf =Configs()     
+            self.conf =Configs() 
+        self.ssl_verify = self.conf.ssl_verify    
         self.auth_config = self.conf.get_user_auth_info()
         self.tl_username = self.auth_config.tl_user
         self.tl_password = self.auth_config.tl_password
         self.tl_url = self.auth_config.tl_url
         self.tokenleader_public_key = self.auth_config.tl_public_key
+        self.ssl_verify = self.conf.ssl_verify
         
 
     def get_token(self):
@@ -24,7 +26,7 @@ class Client():
         service_endpoint = self.tl_url + api_route
         headers={'content-type':'application/json'}
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
-        r = requests.post(service_endpoint, self.data, headers=headers)
+        r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         #print(r_dict)
         return r_dict 
@@ -34,7 +36,7 @@ class Client():
         api_route = '/token/verify_token'
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token}    
-        r = requests.get(service_endpoint, headers=headers)   
+        r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)   
     #     print(r.content)
     #     print(type(r.content))
         r_dict = json.loads(r.content.decode())  
@@ -82,7 +84,7 @@ class Client():
         api_route = '/list/users'
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token}    
-        r = requests.get(service_endpoint, headers=headers)       #     
+        r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)       #     
         r_dict = json.loads(r.content.decode())
 #         print(r_dict)  # for displaying from the cli  print in cli parser
         return r_dict
