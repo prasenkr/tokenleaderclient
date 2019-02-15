@@ -88,7 +88,7 @@ class Configs():
     def get_user_auth_info(self):         
         config = configparser.ConfigParser()
         filepath =  os.path.expanduser(self.user_auth_info_file_location)
-        print(filepath)
+        #print(filepath)
         try:            
             config.read(filepath)            
             self.tl_user = config['DEFAULT']['tl_user']           

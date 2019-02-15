@@ -26,6 +26,7 @@ class Client():
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
         r = requests.post(service_endpoint, self.data, headers=headers)
         r_dict = json.loads(r.content.decode())
+        #print(r_dict)
         return r_dict 
               
     
@@ -57,7 +58,7 @@ class Client():
                             'status': status,
                             'message': message,
                             'payload': payload}
-              
+#         print(responseObject)      
         return responseObject
     
     
@@ -75,6 +76,16 @@ class Client():
                 return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
                 return 'Invalid token. Please log in again.'
+            
+    def list_users(self):
+        token = self.get_token().get('auth_token')
+        api_route = '/list/users'
+        service_endpoint = self.tl_url + api_route
+        headers={'X-Auth-Token': token}    
+        r = requests.get(service_endpoint, headers=headers)       #     
+        r_dict = json.loads(r.content.decode())
+#         print(r_dict)  # for displaying from the cli  print in cli parser
+        return r_dict
         
     
 

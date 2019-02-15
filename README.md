@@ -56,7 +56,17 @@ password is forgotten   the  file has to be deleted and recreated. Accordingly t
 tokenleader server also to be changed. 
 
 
-then from python shell it works as follows  
+
+from the cli 
+--------------------
+
+		tlclient  gettoken
+		tlclient  verify -t <paste the toen here>
+		tlclient  list user
+ 
+ 
+
+then from python shell it works as follows:
 
 		>>> from  tokenleaderclient.client.client import Client  
 		>>> c = Client()
@@ -69,23 +79,12 @@ then from python shell it works as follows
 for RBAC 
 =============
 
+configure the /etc/tokenleader/service_access_policy.yml for RBAC
+
 		from tokenleaderclient.rbac import  enforcer
 
 Now @enforcer.enforce_access_rule_with_token('rulename1',role_acl_map_file, sample_token) is avilable   
-within any flask application where tokenleader client is installed.    
-
-
-Tests
-==============================================
-
-		python -m unittest tokenleaderclient.tests.unittests.test_acl.TestAcl  
-		python -m unittest tokenleaderclient.tests.unittests.test_acl_enforcer_decorator.TestAclEnforcer  
-
-This one need tokenleader server to be running  
-
-		python -m unittest tokenleaderclient.tests.unittests.test_integration_tests.BaseTestCase
-
-
+within any flask application where tokenleader client is installed.   
 
 the detial of the RBAC is as follows:  
  ==============================================================================================
@@ -95,7 +94,7 @@ the detial of the RBAC is as follows:
 
 An enforcer  decorator function named @authclient.enforce_access_rule_with_token(rule_name) does   
 the job.  Every api route shoukd bind this enforcer decorator with a rule name. The list of rules  
-are deifned in the  acl\service_access_policy.yml file  in the format of:  
+are deifned in the /etc/tokenleader/service_access_policy.yml file  in the format of:  
  
 		"serviename:api_route_name:access_method_name"    
 		
@@ -222,7 +221,17 @@ to display a message. They actually  to be used for database query filtering so 
 user is able to view only relevant information.
 		
 
+Tests
+==============================================
+git clone the repo and then run from the pkg  folder
 
+
+		python -m unittest tokenleaderclient.tests.unittests.test_acl.TestAcl  
+		python -m unittest tokenleaderclient.tests.unittests.test_acl_enforcer_decorator.TestAclEnforcer  
+
+This one need tokenleader server to be running  
+
+		python -m unittest tokenleaderclient.tests.unittests.test_integration_tests.BaseTestCase
 
 
 
