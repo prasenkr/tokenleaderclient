@@ -1,6 +1,11 @@
 change log 
 ======================
 
+ver 0.64
+-----------------
+
+1. bug - tlclient command  breaking code resloved 
+
 ver 0.63
 -----------------
 
