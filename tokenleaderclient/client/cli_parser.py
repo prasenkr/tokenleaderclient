@@ -84,7 +84,11 @@ def main():
         else:
             print(c.list_users())
                 
-     
+    if  sys.argv[1] == 'list':
+        if options.name:
+            print(c.list_org_byname(options.name))
+        else:
+            print(c.list_org()) 
     
 if __name__ == '__main__':
     main()
