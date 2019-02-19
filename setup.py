@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='tokenleaderclient',
-      version='0.64',
+      version='0.65',
       description='Client for token based authentication and role based access control',
       long_description=readme(),
       url='https://github.com/microservice-tsp-billing/tokenleaderclient',
@@ -33,8 +33,8 @@ setup(name='tokenleaderclient',
           'Flask-Testing==0.7.1',
       ],
       entry_points = {
-        'console_scripts': ['tlconfig=tokenleaderclient.configs.cli_config:main',
-                            'tlclient=tokenleaderclient.client.cli_parser:main'],
+        'console_scripts': ['tokenleader-auth=tokenleaderclient.configs.cli_config:main',
+                            'tokenleader=tokenleaderclient.client.cli_parser:main'],
         },
       test_suite='nose.collector',
       tests_require=['nose'],

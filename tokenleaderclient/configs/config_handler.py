@@ -18,10 +18,10 @@ class Configs():
                              'ssl_verify'
                              }
         
-    def __init__(self, config_file='/etc/tlclient/general_configs.yml'):
+    def __init__(self, config_file='/etc/tokenleader/client_configs.yml'):
 #         if self.general_config['user_auth_info_from'] == 'file': 
         if not os.path.exists(config_file):
-            print("you need to use tlconfig command to create a config file "
+            print("you need to use tlconfig command to create a client config file "
                   "first in {} , if the file is in other location give the "
                   "filename with path as parameter to Config or Client "
                   "initialization".format(config_file))

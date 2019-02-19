@@ -1,6 +1,13 @@
 change log 
 ======================
 
+ver 0.65
+-----------------------
+
+1. all configs are in /etc/tokenleader
+2. tlclient command changed to tokenleader
+3. tlconfig command changed to tokenleader-auth
+
 ver 0.64
 -----------------
 
@@ -51,7 +58,7 @@ Configuration
 The configuration file is divided into two files . 
 /etc/tlclient/general_configs.yml which holds the non secret configs  about the client and looks as
         
-        sudo vi /etc/tlclient/general_configs.yml
+        sudo vi /etc/tokenleader/client_configs.yml
 
 		user_auth_info_from: file # OSENV or file
 		user_auth_info_file_location: /home/bhujay/tlclient/user_settings.ini
@@ -62,7 +69,7 @@ The configuration file is divided into two files .
 users authentiaction information . The file is generated using  an cli   
 ------------------------------------------------------------------------------
 
-		tlconfig -u user1 -p user1 --url http://localhost:5001   
+		tokenleader-auth -u user1 -p user1 --url http://localhost:5001   
 
 the file , /home/bhujay/tlclient/user_settings.ini , thus generated will looks like this :    
 
@@ -80,9 +87,9 @@ tokenleader server also to be changed.
 from the cli 
 --------------------
 
-		tlclient  gettoken
-		tlclient  verify -t <paste the toen here>
-		tlclient  list user
+		tokenleader  gettoken
+		tokenleader  verify -t <paste the toen here>
+		tokenleader  list user
  
  
 

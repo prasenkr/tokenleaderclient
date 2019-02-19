@@ -10,7 +10,7 @@ from tokenleaderclient.rbac.wfc import WorkFuncContext
 from  tokenleaderclient.client.client import Client 
 
 #TODO:  This file should be read from  configuration settings 
-role_acl_map_file_prod_settings='/etc/tokenleaderclient/role_to_acl_map.yml'
+role_acl_map_file_prod_settings='/etc/tokenleader/role_to_acl_map.yml'
 
 WFC = WorkFuncContext()
 tl_client = Client()
