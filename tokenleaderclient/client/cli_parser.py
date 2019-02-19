@@ -27,6 +27,7 @@ sys.path.insert(0, apppath)
 
 from tokenleaderclient.client.client  import Client
 
+
 c = Client()
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -35,9 +36,8 @@ parser = argparse.ArgumentParser(add_help=False)
 subparser = parser.add_subparsers()
 
 token_parser = subparser.add_parser('gettoken', help="Get a token from the tokenleader server ,"
-                                    " configure /etc/tlclient//etc/tlclient/general_configs.yml "
-                                    "and generate the auth file using tlconfig command before"
-                                    "getting a token" )
+                                    " configure {} and generate the auth file using tlconfig command before"
+                                    "getting a token".format(c.config_file))
 
 token_parser = subparser.add_parser('verify', help='verify  a token' )
 token_parser.add_argument('-t', '--token', 
@@ -45,7 +45,7 @@ token_parser.add_argument('-t', '--token',
                   required = True,
                   help = "verify and retrieve users role and work context from the token "
                         " ensure you have obtained the public key from the tokenleader server"
-                        "and put it in tl_public_key section of /etc/tlclient//etc/tlclient/general_configs.yml",
+                        "and put it in tl_public_key section of {}".format(c.config_file)
                   )
 
 list_parser = subparser.add_parser('list', help='listuser' )

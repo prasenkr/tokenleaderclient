@@ -1,7 +1,7 @@
 change log 
 ======================
 
-ver 0.65
+ver 0.66 
 -----------------------
 
 1. all configs are in /etc/tokenleader
