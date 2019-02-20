@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='tokenleaderclient',
-      version='0.68',
+      version='0.69',
       description='Client for token based authentication and role based access control',
       long_description=readme(),
       url='https://github.com/microservice-tsp-billing/tokenleaderclient',
