@@ -1,7 +1,7 @@
 change log 
 ======================
 
-ver 0.66 
+ver 0.69
 -----------------------
 
 1. all configs are in /etc/tokenleader
@@ -103,10 +103,23 @@ then from python shell it works as follows:
 		{'payload': {'iat': 1549967180, 'exp': 1549970780, 'sub': {'username': 'user1', 'roles': ['role1'], 'id': 1, 'email': 'user1', 'wfc': {'orgunit': 'ou1', 'id': 1, 'org': 'org1', 'department': 'dept1', 'name': 'wfc1'}}}, 'message': 'Token has been successfully decrypted', 'status': 'Verification Successful'}
 		>>>
 
-for RBAC 
-=============
 
-configure the /etc/tokenleader/service_access_policy.yml for RBAC
+for RBAC configure  /etc/tokenleader/role_to_aclmap.yml
+============================================================================================
+	
+      sudo mkdir /etc/tokenleaderclient      
+      sudo vi /etc/tokenleader/role_to_aclmap.yml
+	 
+	  maintain atleast one role and one entry in the follwoing format 
+	 
+		- name: role1
+		  allow:
+		  - tokenleader.adminops.adminops_restapi.list_users		  
+		  
+		- name: role2
+		  allow:
+		  - service1.third_api.rulename3
+		  - service1.fourthapi_api.rulename4
 
 		from tokenleaderclient.rbac import  enforcer
 
@@ -121,7 +134,7 @@ the detial of the RBAC is as follows:
 
 An enforcer  decorator function named @authclient.enforce_access_rule_with_token(rule_name) does   
 the job.  Every api route shoukd bind this enforcer decorator with a rule name. The list of rules  
-are deifned in the /etc/tokenleader/service_access_policy.yml file  in the format of:  
+are deifned in the etc/tokenleader/role_to_aclmap.yml file  in the format of:  
  
 		"serviename:api_route_name:access_method_name"    
 		
@@ -184,7 +197,7 @@ there is an entry for the api access method. The yml file entry is as below:
   
  
 For the programmer , when a new api route is introduced it is much easier to create new  aceess control 
-by making an entry in the service_access_policy instated of database operation
+by making an entry in the srole_to_acl_map.yml instated of database operation
 
 every time the api  call is made , the enforcer decorator reload the role_to_acl_map.yml  making it possible to 
 make online changes to the yml file by the operator . 

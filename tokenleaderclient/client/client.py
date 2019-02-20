@@ -26,8 +26,11 @@ class Client():
         service_endpoint = self.tl_url + api_route
         headers={'content-type':'application/json'}
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
-        r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
-        r_dict = json.loads(r.content.decode())
+        try:
+            r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
+            r_dict = json.loads(r.content.decode())
+        except Exception as e:
+            r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}
         #print(r_dict)
         return r_dict 
               
@@ -35,11 +38,15 @@ class Client():
     def verify_token_from_tl(self,token,):
         api_route = '/token/verify_token'
         service_endpoint = self.tl_url + api_route
-        headers={'X-Auth-Token': token}    
-        r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)   
+        headers={'X-Auth-Token': token}  
+        try:  
+            r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
+            r_dict = json.loads(r.content.decode())  
+        except Exception as e:
+            r_dict = {'error': 'could not conect to server , the error is {}'.format(e)} 
     #     print(r.content)
     #     print(type(r.content))
-        r_dict = json.loads(r.content.decode())  
+        
         return r_dict
     
         
@@ -83,9 +90,13 @@ class Client():
         token = self.get_token().get('auth_token')
         api_route = '/list/users'
         service_endpoint = self.tl_url + api_route
-        headers={'X-Auth-Token': token}    
-        r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)       #     
-        r_dict = json.loads(r.content.decode())
+        headers={'X-Auth-Token': token}  
+        try:  
+            r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
+            r_dict = json.loads(r.content.decode())   
+        except Exception as e:
+            r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}    #     
+        
 #         print(r_dict)  # for displaying from the cli  print in cli parser
         return r_dict
         
