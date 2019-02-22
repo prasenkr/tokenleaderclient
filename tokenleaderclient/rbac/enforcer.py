@@ -131,7 +131,9 @@ def enforce_access_rule_with_token(rule_name, role_acl_map_file=role_acl_map_fil
                 
                     return f(*args, **kws)
             else:
-                msg = "this endpoint is restricted , authenticaton or authorization failed" 
+                msg = ("this endpoint is restricted , authenticaton or authorization failed \n"
+                       "possible reasons: \n  1.access configuration in role_acl_map.yml \n"
+                       "2. missing public key  in the client config file ")
                 print(msg)
                 return json.dumps({'message': msg})
                             

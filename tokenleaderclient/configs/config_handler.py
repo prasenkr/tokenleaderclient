@@ -21,7 +21,7 @@ class Configs():
     def __init__(self, config_file='/etc/tokenleader/client_configs.yml'):
 #         if self.general_config['user_auth_info_from'] == 'file': 
         if not os.path.exists(config_file):
-            print("you need to use tokenleader-auth command to create a client config file "
+            print("you need to create a client config file "
                   "first in {} , if the file is in other location give the "
                   "filename with path as parameter to Config or Client "
                   "initialization".format(config_file))

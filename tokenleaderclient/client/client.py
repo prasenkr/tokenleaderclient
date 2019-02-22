@@ -59,6 +59,13 @@ class Client():
         elif payload == "Invalid token. Please log in again.":
             status = "Invalid token"
             message = "Invalid token. obtain a valid token and send it for verifiaction"
+        elif payload == "did you configured the correct public key in the client_config file":
+            status = " Invalid public key , can not decrypt  token"
+            message = status
+        elif not isinstance(payload, dict):
+            status = "could not verify token"
+            message = status
+            
         else:
             status = "Verification Successful"
             message = "Token has been successfully decrypted"   
@@ -85,6 +92,11 @@ class Client():
                 return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
                 return 'Invalid token. Please log in again.'
+        except ValueError as e:
+               return 'did you configured the correct public key in the client_config file'
+        except Exception as e:
+            return "could not decrypt the token for error {}".format(e)
+
             
     def list_users(self):
         token = self.get_token().get('auth_token')
