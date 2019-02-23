@@ -35,12 +35,12 @@ class Configs():
                 self.general_config['fernet_key_file'])
             self.user_auth_info_file_location = os.path.expanduser(
                 self.general_config['user_auth_info_file_location']) 
-            with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
-                    self.public_key = f.read() 
+#             with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
+#                     self.public_key = f.read() 
             if self.general_config['tl_public_key']:
                 self.tl_public_key = self.general_config['tl_public_key']
-            else:
-                self.tl_public_key =  self.public_key
+#             else:
+#                 self.tl_public_key =  self.public_key
             self.ssl_verify = self.general_config['ssl_verify']
         else:
             print("{} file must have the following sections {}".format(

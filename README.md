@@ -1,6 +1,10 @@
 change log 
 ======================
 
+ver 0.70
+----------------
+public key reading from id_rsa.pub disabled since it is picked up from yml
+
 ver 0.69
 -----------------------
 
