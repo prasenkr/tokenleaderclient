@@ -2,23 +2,20 @@ import requests
 import json
 import jwt
 
-from tokenleaderclient.configs.config_handler import Configs
 
 
 class Client():   
      
-    def __init__(self , conf_file=None):
-        if  conf_file:
-            self.conf =Configs(conf_file)
-        else:
-            self.conf =Configs() 
-        self.ssl_verify = self.conf.ssl_verify    
-        self.auth_config = self.conf.get_user_auth_info()       
-        self.tl_username = self.auth_config.tl_user
-        self.tl_password = self.auth_config.tl_password
-        self.tl_url = self.auth_config.tl_url
-        self.tokenleader_public_key = self.auth_config.tl_public_key
-        self.ssl_verify = self.conf.ssl_verify
+    def __init__(self , auth_config):
+        '''
+        auth_config is  tokenleaderclient.configs.config_handler.Configs object
+        initialized by the user of the client
+        ''' 
+        self.tl_username = auth_config.tl_user
+        self.tl_password = auth_config.tl_password  
+        self.tl_url = auth_config.tl_url    
+        self.ssl_verify = auth_config.ssl_verify     
+        self.tokenleader_public_key = auth_config.tl_public_key 
         
 
     def get_token(self):

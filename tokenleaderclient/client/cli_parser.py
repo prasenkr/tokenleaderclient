@@ -24,20 +24,21 @@ apppath = (os.path.join(possible_topdir,
 sys.path.insert(0, apppath)
 
 #print(sys.path)
-
+from tokenleaderclient.configs.config_handler import Configs
 from tokenleaderclient.client.client  import Client
+auth_config = Configs()
+c = Client(auth_config)
+
+parent_parser = argparse.ArgumentParser(add_help=False)
+parent_parser.add_argument( '--authuser', action = "store", dest = "authuser", required = False,)
+parent_parser.add_argument('--authpwd', action = "store", dest = "authpwd", required = False)
 
 
-c = Client()
+subparser = parent_parser.add_subparsers()
 
-parser = argparse.ArgumentParser(add_help=False)
-
-
-subparser = parser.add_subparsers()
-
-token_parser = subparser.add_parser('gettoken', help="Get a token from the tokenleader server ,"
+token_parser = subparser.add_parser('gettoken', parents=[parent_parser], help="Get a token from the tokenleader server ,"
                                     " configure {} and generate the auth file using tlconfig command before"
-                                    "getting a token".format(c.conf.config_file))
+                                    "getting a token".format(auth_config.config_file))
 
 token_parser = subparser.add_parser('verify', help='verify  a token' )
 token_parser.add_argument('-t', '--token', 
@@ -45,7 +46,7 @@ token_parser.add_argument('-t', '--token',
                   required = True,
                   help = "verify and retrieve users role and work context from the token "
                         " ensure you have obtained the public key from the tokenleader server"
-                        "and put it in tl_public_key section of {}".format(c.conf.config_file)
+                        "and put it in tl_public_key section of {}".format(auth_config.config_file)
                   )
 
 list_parser = subparser.add_parser('list', help='listuser' )
@@ -58,19 +59,24 @@ list_parser.add_argument('-n', '--name',
 
 
 try:                    
-    options = parser.parse_args()  
+    options = parent_parser.parse_args()  
 except:
     #print usage help when no argument is provided
-    parser.print_help(sys.stderr)    
+    parent_parser.print_help(sys.stderr)    
     sys.exit(1)
 
-def main():
+def main():     
+  
     if len(sys.argv)==1:
         # display help message when no args are passed.
-        parser.print_help()
+        parent_parser.print_help()
         sys.exit(1)   
    
     #print(sys.argv)
+    if options.authuser and options.authpwd:        
+        auth_config = Configs(tlusr=options.authuser, tlpwd=options.authpwd)
+        c = Client(auth_config)
+        print("initializing client  using the user name and password supplied from CLI")
     
     if  sys.argv[1] == 'gettoken':
         print(c.get_token())

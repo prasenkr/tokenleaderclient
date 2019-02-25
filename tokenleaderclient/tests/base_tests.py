@@ -2,13 +2,15 @@ import os
 import unittest
 from tokenleaderclient.configs.config_handler import Configs
 from tokenleaderclient.client.client import Client
+from setuptools.command.setopt import config_file
 
 settings_file = 'tokenleaderclient/tests/testdata/test_general_configs.yml'
 tl_user = 'user1'
 tl_pwd = 'user1'
 tl_url  =  'http://localhost:5001'
 # conf = Configs(settings_file)
-conf = Configs()
+conf = Configs(config_file=settings_file)
+conf_from_manual_input = Configs(config_file=settings_file , tlusr=tl_user , tlpwd=tl_pwd )
 # TLClient = Client(settings_file)  
    
 
@@ -16,33 +18,45 @@ conf = Configs()
 class TestConfigs(unittest.TestCase):
     
     def test_generate_auth_file_with_encrypted_pwd(self):
-        conf.generate_user_auth_file(tl_user, tl_pwd, tl_url )
-        self.assertTrue(os.path.exists('tokenleaderclient/tests/testdata/test_general_configs.yml'))
+        conf.generate_user_auth_file(tl_pwd)
+        self.assertTrue(os.path.exists('tokenleaderclient/tests/testdata/test_settings.ini'))
         
     def test_get_user_auth_info(self):
-        conf.get_user_auth_info()
+        conf.decrypt_password()
         self.assertTrue((conf.tl_password , conf.tl_user, conf.tl_url) == (tl_pwd, tl_user, tl_url))
     
          
-    def test_get_token_method(self):
-        TLClient = Client(settings_file)            
+    def test_get_token_method(self):        
+        TLClient = Client(conf)            
         r1 = TLClient.get_token()
+        print(r1)   
         self.assertTrue(isinstance(r1, dict))        
-        self.assertTrue(k in r for k in ('auth_token' ,'service_catalog', 'status'))   
-    
+        self.assertTrue('auth_token'  in r1)   
         
-    def test_verify_token_from_tl(self):
-        TLClient = Client(settings_file) 
+    
+    def test_get_token_method_with_manual_user_input(self):        
+        TLClient = Client(conf_from_manual_input)                 
+        r1 = TLClient.get_token()
+        print(r1)   
+        self.assertTrue(isinstance(r1, dict))        
+        self.assertTrue('service_catalog' in r1)   
+    
+     
+    
+    def test_verify_token_local(self):
+        TLClient = Client(conf) 
         r = TLClient.get_token()
+        print(r)
         token = r['auth_token']
-        r1  = TLClient.verify_token_from_tl(token)
+        r1 = TLClient.verify_token(token)
         self.assertTrue(r1['status'] == 'Verification Successful')        
         self.assertTrue(isinstance(r1.get('payload').get('sub'), dict))
         
     
-    def test_verify_token_local(self):
-        TLClient = Client(settings_file) 
+    def test_verify_token_local_manaul_user(self):
+        TLClient = Client(conf_from_manual_input) 
         r = TLClient.get_token()
+        print(r)
         token = r['auth_token']
         r1 = TLClient.verify_token(token)
         self.assertTrue(r1['status'] == 'Verification Successful')        
