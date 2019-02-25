@@ -13,13 +13,9 @@ class Client():
         else:
             self.conf =Configs() 
         self.ssl_verify = self.conf.ssl_verify    
-        self.auth_config = self.conf.get_user_auth_info()
-        if tluser and tlpwd:
-             self.tl_username = tluser
-             self.tl_password = tlpwd
-        else:
-            self.tl_username = self.auth_config.tl_user
-            self.tl_password = self.auth_config.tl_password
+        self.auth_config = self.conf.get_user_auth_info()       
+        self.tl_username = self.auth_config.tl_user
+        self.tl_password = self.auth_config.tl_password
         self.tl_url = self.auth_config.tl_url
         self.tokenleader_public_key = self.auth_config.tl_public_key
         self.ssl_verify = self.conf.ssl_verify
