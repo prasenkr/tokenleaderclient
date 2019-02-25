@@ -74,9 +74,12 @@ def main():
    
     #print(sys.argv)
     if options.authuser and options.authpwd:        
-        auth_config = Configs(tlusr=options.authuser, tlpwd=options.authpwd)
-        c = Client(auth_config)
+        auth_config = Configs(tlusr=options.authuser, tlpwd=options.authpwd)       
         print("initializing client  using the user name and password supplied from CLI")
+    else:
+         auth_config = Configs()
+         
+    c = Client(auth_config)
     
     if  sys.argv[1] == 'gettoken':
         print(c.get_token())
