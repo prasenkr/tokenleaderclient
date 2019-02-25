@@ -15,10 +15,11 @@ class Configs():
                              'fernet_key_file', 
                              'user_auth_info_file_location',
                              'tl_public_key',
+                             'tl_url',
                              'ssl_verify'
                              }
         
-    def __init__(self, config_file='/etc/tokenleader/client_configs.yml'):
+    def __init__(self, config_file='/etc/tokenleader/client_configs.yml', tlusr=None, tlpwd=None):
 #         if self.general_config['user_auth_info_from'] == 'file': 
         if not os.path.exists(config_file):
             print("you need to create a client config file "
