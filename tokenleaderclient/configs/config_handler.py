@@ -7,7 +7,8 @@ import six
 
 
 class Configs():
-  
+    
+    tl_password = ''  
     must_have_keys_in_yml = {'user_auth_info_from',
                              'fernet_key_file', 
                              'user_auth_info_file_location',
@@ -47,8 +48,8 @@ class Configs():
                 self.tl_user = tlusr
                 self.tl_password = tlpwd
             else:
-                self.tl_user = self.general_config['tl_user']
-                self.tl_password = self.decrypt_password()
+                self.tl_user = self.general_config['tl_user']                             
+                
         else:
             print("{} file must have the following sections {}".format(
                 self.config_file, self.must_have_keys_in_yml ))
@@ -106,7 +107,7 @@ class Configs():
            cipher_suite = Fernet(file_content)        
            return cipher_suite
        
-    def decrypt_password(self):         
+    def decrypt_password(self):                 
         config = configparser.ConfigParser()
         filepath =  os.path.expanduser(self.user_auth_info_file_location)
         #print(filepath)
@@ -114,14 +115,17 @@ class Configs():
             config.read(filepath)  
             encrpted_text_from_file = config["DEFAULT"]['tl_password']                  
             msg = "got all info from file and decrypted the password"
+            byte_encrpted_text = encrpted_text_from_file.encode("utf-8")
+            cipher_suite = self.get_fernet_cipher_from_keyfile(self.fernet_key_file)
+            byte_decrpted_text = cipher_suite.decrypt(byte_encrpted_text)
+            clear_decrypted_text = bytes(byte_decrpted_text).decode("utf-8")  
         except Exception as e:
             msg = " auth file or relevant section is not found, the full error is {}".format(e)
             print(msg)
-        byte_encrpted_text = encrpted_text_from_file.encode("utf-8")
-        cipher_suite = self.get_fernet_cipher_from_keyfile(self.fernet_key_file)
-        byte_decrpted_text = cipher_suite.decrypt(byte_encrpted_text)
-        clear_decrypted_text = bytes(byte_decrpted_text).decode("utf-8")        
-        return clear_decrypted_text
+            clear_decrypted_text = ""
+            
+        self.tl_password = clear_decrypted_text            
+        return self
     
     
     
