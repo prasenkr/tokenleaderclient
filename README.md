@@ -1,29 +1,30 @@
-change log 
-======================
 
-ver 0.64
------------------
+New feature and major changes
+================================
+ver 0.71 
+-------------------------
 
-1. bug - tlclient command  breaking code resloved 
-
-ver 0.63
------------------
-
-1. check for  presense of required  keys in /etc/tlclient/general_configs.yml   
-2. ssl_verify: False corrently this should be always False, cert verification can be introduced later based on reqirement.  
-3. ability to connect on https   when the  tokenleader url is https  in user_settings.ini   
+1. Before the client instanciation , we need a auth_config instance 
+2. user name and password can be passed to auth_config=Configs() instance wither form the  config file  
+   or  as a parameter of auth_config=Configs(tlusr , tlpwd)
+3. tl_user and tl_url configuration is moved to client_configs.yml  file  since there is no need to keep these files
+   as secret along with the encrypted password file
+   
 
 
-
-tokenleader-client
+tokenleaderclient
 =================================
 
-Pyhton  client which reads user's credential from a text file  or from users   
-os environment ( not yet implemented) and initialize a client. 
+Pyhton  client  - reads  users credentials from the /etc/tokenleader/client_configs.yml . 
+The user name and password can be also provided as input  while initializing the Client class.
+
+When it is from file , the encrypted password is generested by  a cli utility named
+tokenleader-auth -p <password>
+
 
 the client has the folowing operations :  
 
--- tlconfig cli utility for storing uers credential in local disk with password encryption  (normally users home directory)
+-- tokenleader-auth  cli utility for storing uers credential in local disk with password encryption  (normally users home directory)
 
 -- get token from token leader , including the catalog information 
 
@@ -51,24 +52,31 @@ Configuration
 The configuration file is divided into two files . 
 /etc/tlclient/general_configs.yml which holds the non secret configs  about the client and looks as
         
-        sudo vi /etc/tlclient/general_configs.yml
+        sudo vi /etc/tokenleader/client_configs.yml
 
 		user_auth_info_from: file # OSENV or file
-		user_auth_info_file_location: /home/bhujay/tlclient/user_settings.ini
-		fernet_key_file: /home/bhujay/tlclient/prod_farnetkeys
+		user_auth_info_file_location: tokenleaderclient/tests/testdata/test_settings.ini
+		fernet_key_file: tokenleaderclient/tests/testdata/farnetkeys
 		tl_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYV9y94je6Z9N0iarh0xNrE3IFGrdktV2TLfI5h60hfd9yO7L9BZtd94/r2L6VGFSwT/dhBR//CwkIuue3RW23nbm2OIYsmsijBSHtm1/2tw/0g0UbbneM9vFt9ciCjdq3W4VY8I6iQ7s7v98qrtRxhqLc/rH2MmfERhQaMQPaSnMaB59R46xCtCnsJ+OoZs5XhGOJXJz8YKuCw4gUs4soRMb7+k7F4wADseoYuwtVLoEmSC+ikbmPZNWOY18HxNrSVJOvMH2sCoewY6/GgS/5s1zlWBwV/F0UvmKoCTf0KcNHcdzXbeDU9/PkGU/uItRYVfXIWYJVQZBveu7BYJDR bhujay@DESKTOP-DTA1VEB
-		the other file , which is user_auth_info_file_location: /home/bhujay/tlclient/user_settings.ini   holds the   
+		tl_user: user1
+		tl_url: http://localhost:5001
+		ssl_verify: False
+
+you may need the  public key from tokenleader server or use the default one which works with the 
+defualt docker bhujay/tokenleader:1.8
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDENN9QYdy6RUEJUsOcGECj+7uvyhHlNaZqVN5YcP/MCxBIEoWD3ewu1bQxqW/xC938gHXGZ7NWncv+u9IADwmVYBD8/hYUWJFOKFOKtt8+ZcAFamAz6qGAmKFUnThZ5C/n1PAwS8L03aj62NfxXTjgpohcKRn3Pq9SW7TNgeApn3RSkGoydKJOqo8GeNnKuDxJMHhkR663pLtYH+VOvE/TzethQn64Xc1/HL02o6HRsCWtI0UXev2RLMsVa/wP0k2ItUi7YnmZPyL6ATfeiHIRrRmfDsidqUA6eNZ+fsdw6dO6H0TGggeYd+d8I14PBTx6zYwL+QIEiqNBxP6nIdMp bhujay@DESKTOP-DTA1VEB
+
+
 
 users authentiaction information . The file is generated using  an cli   
 ------------------------------------------------------------------------------
 
-		tlconfig -u user1 -p user1 --url http://localhost:5001   
+		tokenleader-auth  -p user1 
 
 the file , /home/bhujay/tlclient/user_settings.ini , thus generated will looks like this :    
 
-		[DEFAULT]  
-		tl_user = user1  
-		tl_url = http://localhost:5001  
+		[DEFAULT]  		
 		tl_password = gAAAAABcYnpRqet_VEucowJrE0lM1RQh2j5E-_Al4j8hm8vJaMvfj2nk7yb3zQo95lBFDoDR_CeoHVRY3QBFFG-p9Ga4bkJKBw==
 
 note that the  original password has been encrypted before  saving in the file. if the keyfile is lost or the 
@@ -77,34 +85,79 @@ tokenleader server also to be changed.
 
 
 
-from the cli 
---------------------
+CLI utilities 
+====================================================================
+using user name and password from config file 
 
-		tlclient  gettoken
-		tlclient  verify -t <paste the toen here>
-		tlclient  list user
+		tokenleader  gettoken 
+		
+or username and password can be supplied  theough the CLI 
+
+		gettoken  --authuser user1 --authpwd user1
+		
+Other CLI operaions 
+
+		tokenleader  verify -t <paste the toen here>
+		tokenleader  list user
  
  
+Python client 
+======================================================================================
+From python shell it works as follows:
 
-then from python shell it works as follows:
+        from tokenleaderclient.configs.config_handler import Configs    
+		from  tokenleaderclient.client.client import Client 
+		
+		
+this will read  the credentials from configurations file. Will be used for CLI. 
+ 
+		auth_config = Configs()  	
+		
+the user name and password will be  taken from the input  but rest of the settings will be from config files.  
+This will be used for browser based login  
 
-		>>> from  tokenleaderclient.client.client import Client  
-		>>> c = Client()
-		>>> c.get_token()
+		auth_config = Configs(tlusr='user1', tlpwd='user1') 
+		
+Inititialize the client with auth_config
+	 
+		c = Client(auth_config)
+		c.get_token()
 		{'message': 'success', 'status': 'success', 'auth_token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg', 'service_catalog': {'tokenleader': {'endpoint_url_external': 'localhost:5001', 'endpoint_url_admin': None, 'id': 2, 'endpoint_url_internal': None, 'name': 'tokenleader'}, 'micros1': {'endpoint_url_external': 'localhost:5002', 'endpoint_url_admin': None, 'id': 1, 'endpoint_url_internal': None, 'name': 'micros1'}}}
-		>>> c.verify_token('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg')
+		c.verify_token('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg')
 		{'payload': {'iat': 1549967180, 'exp': 1549970780, 'sub': {'username': 'user1', 'roles': ['role1'], 'id': 1, 'email': 'user1', 'wfc': {'orgunit': 'ou1', 'id': 1, 'org': 'org1', 'department': 'dept1', 'name': 'wfc1'}}}, 'message': 'Token has been successfully decrypted', 'status': 'Verification Successful'}
-		>>>
+		
 
-for RBAC 
-=============
 
-configure the /etc/tokenleader/service_access_policy.yml for RBAC
+for RBAC configure  /etc/tokenleader/role_to_aclmap.yml
+============================================================================================
+	
+      sudo mkdir /etc/tokenleader 
+      sudo vi /etc/tokenleader/role_to_acl_map.yml
+	 
+	  maintain atleast one role and one entry in the follwoing format 
+	 
+		- name: role1
+		  allow:
+		  - tokenleader.adminops.adminops_restapi.list_users		  
+		  
+		- name: role2
+		  allow:
+		  - service1.third_api.rulename3
+		  - service1.fourthapi_api.rulename4
 
-		from tokenleaderclient.rbac import  enforcer
+		from tokenleaderclient.rbac.enforcer import Enforcer
+		enforcer = Enforcer(c)
+		
+Here c is the instance of  Client() , the tokenleadercliet which we have initialized in the previous
+example of python client.  
 
-Now @enforcer.enforce_access_rule_with_token('rulename1',role_acl_map_file, sample_token) is avilable   
-within any flask application where tokenleader client is installed.   
+Now @enforcer.enforce_access_rule_with_token('rulename1') is avilable within any flask application  
+where tokenleader client is installed.   
+
+
+
+=============================================================================================================
+
 
 the detial of the RBAC is as follows:  
  ==============================================================================================
@@ -114,7 +167,7 @@ the detial of the RBAC is as follows:
 
 An enforcer  decorator function named @authclient.enforce_access_rule_with_token(rule_name) does   
 the job.  Every api route shoukd bind this enforcer decorator with a rule name. The list of rules  
-are deifned in the /etc/tokenleader/service_access_policy.yml file  in the format of:  
+are deifned in the etc/tokenleader/role_to_aclmap.yml file  in the format of:  
  
 		"serviename:api_route_name:access_method_name"    
 		
@@ -177,7 +230,7 @@ there is an entry for the api access method. The yml file entry is as below:
   
  
 For the programmer , when a new api route is introduced it is much easier to create new  aceess control 
-by making an entry in the service_access_policy instated of database operation
+by making an entry in the srole_to_acl_map.yml instated of database operation
 
 every time the api  call is made , the enforcer decorator reload the role_to_acl_map.yml  making it possible to 
 make online changes to the yml file by the operator . 
@@ -245,7 +298,8 @@ Tests
 ==============================================
 git clone the repo and then run from the pkg  folder
 
-
+        python -m unittest  discover tokenleaderclient.tests
+        
 		python -m unittest tokenleaderclient.tests.unittests.test_acl.TestAcl  
 		python -m unittest tokenleaderclient.tests.unittests.test_acl_enforcer_decorator.TestAclEnforcer  
 
@@ -253,6 +307,33 @@ This one need tokenleader server to be running
 
 		python -m unittest tokenleaderclient.tests.unittests.test_integration_tests.BaseTestCase
 
+
+
+change log 
+======================
+
+ver 0.70
+----------------
+public key reading from id_rsa.pub disabled since it is picked up from yml
+
+ver 0.69
+-----------------------
+
+1. all configs are in /etc/tokenleader
+2. tlclient command changed to tokenleader
+3. tlconfig command changed to tokenleader-auth
+
+ver 0.64
+-----------------
+
+1. bug - tlclient command  breaking code resloved 
+
+ver 0.63
+-----------------
+
+1. check for  presense of required  keys in /etc/tlclient/general_configs.yml   
+2. ssl_verify: False corrently this should be always False, cert verification can be introduced later based on reqirement.  
+3. ability to connect on https   when the  tokenleader url is https  in user_settings.ini   
 
 
 

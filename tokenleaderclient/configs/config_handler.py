@@ -8,20 +8,21 @@ import six
 
 class Configs():
     
-    tl_user = ''
-    tl_password = ''
-    tl_url = ''
+    tl_password = ''  
     must_have_keys_in_yml = {'user_auth_info_from',
                              'fernet_key_file', 
                              'user_auth_info_file_location',
                              'tl_public_key',
-                             'ssl_verify'
+                             'ssl_verify',
+                             'tl_url',
+                             'tl_user'
                              }
         
-    def __init__(self, config_file='/etc/tlclient/general_configs.yml'):
+    def __init__(self, config_file='/etc/tokenleader/client_configs.yml',
+                 tlusr=None, tlpwd=None):
 #         if self.general_config['user_auth_info_from'] == 'file': 
         if not os.path.exists(config_file):
-            print("you need to use tlconfig command to create a config file "
+            print("you need to create a client config file "
                   "first in {} , if the file is in other location give the "
                   "filename with path as parameter to Config or Client "
                   "initialization".format(config_file))
@@ -35,13 +36,20 @@ class Configs():
                 self.general_config['fernet_key_file'])
             self.user_auth_info_file_location = os.path.expanduser(
                 self.general_config['user_auth_info_file_location']) 
-            with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
-                    self.public_key = f.read() 
+#             with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
+#                     self.public_key = f.read() 
             if self.general_config['tl_public_key']:
                 self.tl_public_key = self.general_config['tl_public_key']
-            else:
-                self.tl_public_key =  self.public_key
+#             else:
+#                 self.tl_public_key =  self.public_key
             self.ssl_verify = self.general_config['ssl_verify']
+            self.tl_url = self.general_config['tl_url']
+            if tlusr and tlpwd:
+                self.tl_user = tlusr
+                self.tl_password = tlpwd
+            else:
+                self.tl_user = self.general_config['tl_user']                             
+                
         else:
             print("{} file must have the following sections {}".format(
                 self.config_file, self.must_have_keys_in_yml ))
@@ -57,7 +65,7 @@ class Configs():
             return parsed or {}
         
     
-    def generate_user_auth_file(self, tl_usr, tl_pwd, tl_url):
+    def generate_user_auth_file(self, tl_pwd):
         '''
         Also stores encrypted password. user should use a cli utility to call this method to generate 
         the file
@@ -71,9 +79,7 @@ class Configs():
             byte_password = tl_pwd.encode("utf-8")
             encrypted_password = cipher_suite.encrypt(byte_password)
             encrypted_password_text = bytes(encrypted_password).decode("utf-8")                 
-            config = configparser.ConfigParser()
-            config['DEFAULT']['tl_user'] = tl_usr        
-            config["DEFAULT"]['tl_url'] = tl_url
+            config = configparser.ConfigParser()            
             config["DEFAULT"]['tl_password'] = encrypted_password_text 
             print ('creating file % s' % self.user_auth_info_file_location)
             with open(filepath, 'w') as f:
@@ -101,24 +107,24 @@ class Configs():
            cipher_suite = Fernet(file_content)        
            return cipher_suite
        
-    def get_user_auth_info(self):         
+    def decrypt_password(self):                 
         config = configparser.ConfigParser()
         filepath =  os.path.expanduser(self.user_auth_info_file_location)
         #print(filepath)
         try:            
-            config.read(filepath)            
-            self.tl_user = config['DEFAULT']['tl_user']           
-            self.tl_url = config["DEFAULT"]['tl_url']
+            config.read(filepath)  
             encrpted_text_from_file = config["DEFAULT"]['tl_password']                  
             msg = "got all info from file and decrypted the password"
+            byte_encrpted_text = encrpted_text_from_file.encode("utf-8")
+            cipher_suite = self.get_fernet_cipher_from_keyfile(self.fernet_key_file)
+            byte_decrpted_text = cipher_suite.decrypt(byte_encrpted_text)
+            clear_decrypted_text = bytes(byte_decrpted_text).decode("utf-8")  
         except Exception as e:
             msg = " auth file or relevant section is not found, the full error is {}".format(e)
             print(msg)
-        byte_encrpted_text = encrpted_text_from_file.encode("utf-8")
-        cipher_suite = self.get_fernet_cipher_from_keyfile(self.fernet_key_file)
-        byte_decrpted_text = cipher_suite.decrypt(byte_encrpted_text)
-        clear_decrypted_text = bytes(byte_decrpted_text).decode("utf-8")
-        self.tl_password = clear_decrypted_text
+            clear_decrypted_text = ""
+            
+        self.tl_password = clear_decrypted_text            
         return self
     
     

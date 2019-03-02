@@ -19,20 +19,11 @@ from tokenleaderclient.configs.config_handler import Configs
 conf =Configs()
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--username', 
-                  action = "store", dest = "username",
-                  required = True,
-                  help = "tokenleader user accoount",
-                  default = "")
+
 parser.add_argument('-p', '--password', 
                   action = "store", dest = "password",
                   required = True,
                   help = "tokenleader user password, note down this password , this will be stored as encrypted",
-                  default = "")
-parser.add_argument( '--url', 
-                  action = "store", dest = "url",
-                  required = True,
-                  help = "url for the tokenleader service including port , client will try to connect here",
                   default = "")
 
 try:                  
@@ -44,4 +35,4 @@ except:
 
 
 def main():
-    conf.generate_user_auth_file(options.username, options.password, options.url )
+    conf.generate_user_auth_file(options.password)
