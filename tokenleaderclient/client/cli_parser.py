@@ -98,6 +98,25 @@ def main():
             print(c.list_org_byname(options.name))
         else:
             print(c.list_org()) 
+            
+    if  sys.argv[1] == 'list':
+        if options.name:
+            print(c.list_org_byname(options.name))
+        else:
+            print(c.list_org())
+
+    if  sys.argv[1] == 'list':
+        if options.name:
+            print(c.list_role_byname(options.name))
+        else:
+            print(c.list_role())
+
+    if  sys.argv[1] == 'list':
+        if options.name:
+            print(c.list_ou_byname(options.name))
+        else:
+            print(c.list_ou())
+
     
 if __name__ == '__main__':
     main()
