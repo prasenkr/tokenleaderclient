@@ -50,7 +50,7 @@ token_parser.add_argument('-t', '--token',
                   )
 
 list_parser = subparser.add_parser('list', help='listuser' )
-list_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
+list_parser.add_argument('-e', '--entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
 list_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
                   required = False,
@@ -88,34 +88,40 @@ def main():
         print(c.verify_token(options.token))
     
     if  sys.argv[1] == 'list':
-        if options.name:
+        if options.entity == 'user':
+         if options.name:
             print(c.list_user_byname(options.name))
-        else:
+         else:
             print(c.list_users())
                 
     if  sys.argv[1] == 'list':
-        if options.name:
-            print(c.list_org_byname(options.name))
-        else:
-            print(c.list_org()) 
+        if options.entity == 'dept':
+         if options.name:
+            print(c.list_dept_byname(options.name))
+         else:
+            print(c.list_dept()) 
             
     if  sys.argv[1] == 'list':
-        if options.name:
+        if options.entity == 'org':
+         if options.name:
             print(c.list_org_byname(options.name))
-        else:
+         else:
             print(c.list_org())
 
     if  sys.argv[1] == 'list':
-        if options.name:
+        if options.entity == 'role':
+          if options.name:
             print(c.list_role_byname(options.name))
-        else:
+          else:
             print(c.list_role())
 
     if  sys.argv[1] == 'list':
-        if options.name:
+        if options.entity == 'ou':
+          if options.name:
             print(c.list_ou_byname(options.name))
-        else:
+          else:
             print(c.list_ou())
+            
 
     
 if __name__ == '__main__':
