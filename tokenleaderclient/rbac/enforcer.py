@@ -91,7 +91,8 @@ class Enforcer():
         token_verification_result = self.extract_token_data_from_api_request(verified_token)
         #print(token_verification_result)
         if token_verification_result['status'] == 'Verification Successful' :                   
-            #username = token_verification_result['payload'].get('sub').get('username')
+            username = token_verification_result['payload'].get('sub').get('username')
+            email = token_verification_result['payload'].get('sub').get('email')
             wcf_from_token = token_verification_result['payload'].get('sub').get('wfc')
             roles_in_token = token_verification_result['payload'].get('sub').get('roles')
             print("user has following roles: {}".format(roles_in_token))
@@ -108,11 +109,11 @@ class Enforcer():
                     status_list_of_rule_check.append(compare_status)            
             #print(status_list_of_rule_check)    
             if True in status_list_of_rule_check:
-                return True, wcf_from_token, token_verification_result['message']
+                return True, username, email, wcf_from_token, token_verification_result['message']
             else:
-                return False, wcf_from_token, token_verification_result['message']  
+                return False, username, email, wcf_from_token, token_verification_result['message']  
         else:
-            return False, False, token_verification_result['message'] 
+            return False, False, False, False, token_verification_result['message'] 
                 
 
 
@@ -125,12 +126,12 @@ class Enforcer():
         def decorator(f):  
             @functools.wraps(f)
             def wrapper_function(*args, **kws):
-                role_exists_in_acl, wcf_from_token, msg = \
+                role_exists_in_acl, username, email, wcf_from_token, msg = \
                 self.extract_roles_from_verified_token_n_compare_acl_map(rule_name, role_acl_map_file,
                                                                        verified_token)
                 #print(role_exists_in_acl, wcf_from_token)
                 if wcf_from_token:
-                    WFC.setcontext(wcf_from_token)
+                    WFC.setcontext(username, email, wcf_from_token)
                     #print(WFC.org)
                     kws['wfc'] = WFC
                 if role_exists_in_acl:
