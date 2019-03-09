@@ -2,6 +2,11 @@
 New feature and major changes
 ================================
 
+ver 1.1 
+----------------------
+username and email made available to api route functions through enforcer. function now can extract it from the manadatory 
+wfc param 
+
 ver 1.0
 -----------------
 more api routes for listing objects 
