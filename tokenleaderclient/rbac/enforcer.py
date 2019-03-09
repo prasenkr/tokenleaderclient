@@ -12,15 +12,17 @@ from  tokenleaderclient.client.client import Client
 #TODO:  This file should be read from  configuration settings 
 
 WFC = WorkFuncContext()
-role_acl_map_file_prod_settings='/etc/tokenleader/role_to_acl_map.yml'
+role_acl_map_file='/etc/tokenleader/role_to_acl_map.yml'
 
 class Enforcer():   
     
     def __init__(self, tl_client, 
-                 role_acl_map_file_prod_settings='/etc/tokenleader/role_to_acl_map.yml' ):
+                 role_acl_map_file='/etc/tokenleader/role_to_acl_map.yml' ,
+                 test_token=None):
         
         self.tl_client = tl_client
-        self.role_acl_map_file_prod_settings = role_acl_map_file_prod_settings
+        self.role_acl_map_file = role_acl_map_file
+        self.test_token = test_token
 
     def get_token_only(self):
         r_dict = self.tl_client.get_token()            
@@ -37,11 +39,11 @@ class Enforcer():
         return r_dict
 
 
-    def extract_token_data_from_api_request(self,verifed_token=None):
+    def extract_token_data_from_api_request(self):
         
         token_verification_result = {}
         
-        if not verifed_token: 
+        if not self.test_token: 
             auth_token = flask.request.headers.get('X-Auth-Token')
             if not auth_token :
                 #flask.abort(404)
@@ -54,8 +56,8 @@ class Enforcer():
                 #auth_token = fdata['auth_token']
                 token_verification_result = self.verify_token(auth_token) 
         else:
-            if isinstance(verifed_token, dict):
-                token_verification_result =   verifed_token
+            if isinstance(self.test_token, dict):
+                token_verification_result =   self.test_token
             else: 
                 token_verification_result['message']  = 'invalid token type' 
                 token_verification_result['status'] = "Token verification failed"
@@ -63,9 +65,8 @@ class Enforcer():
         return  token_verification_result    
        
 
-    def compare_role_in_token_with_acl_map(self, user_role_in_token, rule_name, 
-                                           role_acl_map_file=role_acl_map_file_prod_settings):
-        role_to_acl_map_list = load_role_to_acl_map(role_acl_map_file)
+    def compare_role_in_token_with_acl_map(self, user_role_in_token, rule_name):
+        role_to_acl_map_list = load_role_to_acl_map(self.role_acl_map_file)
     #     print(role_to_acl_map_list)
         found_role_acl_map = []
         for role_acl_map in role_to_acl_map_list:        
@@ -87,8 +88,8 @@ class Enforcer():
             return False   
     
     
-    def extract_roles_from_verified_token_n_compare_acl_map(self, rule_name, role_acl_map_file, verified_token=None):
-        token_verification_result = self.extract_token_data_from_api_request(verified_token)
+    def extract_roles_from_verified_token_n_compare_acl_map(self, rule_name):
+        token_verification_result = self.extract_token_data_from_api_request()
         #print(token_verification_result)
         if token_verification_result['status'] == 'Verification Successful' :                   
             username = token_verification_result['payload'].get('sub').get('username')
@@ -103,8 +104,7 @@ class Enforcer():
                       status_list_of_rule_check.append(True)
                 else:      
                     compare_status = self.compare_role_in_token_with_acl_map(user_role_in_token, 
-                                                       rule_name,
-                                                       role_acl_map_file)
+                                                       rule_name)
                     #print(compare_status)            
                     status_list_of_rule_check.append(compare_status)            
             #print(status_list_of_rule_check)    
@@ -117,8 +117,7 @@ class Enforcer():
                 
 
 
-    def enforce_access_rule_with_token(self, rule_name, role_acl_map_file=role_acl_map_file_prod_settings,
-                                        verified_token=None,):
+    def enforce_access_rule_with_token(self, rule_name):
         '''
         the original function  where you will apply this enforcer decorator 
         must have a mandatory wfc  as its argument
@@ -127,8 +126,7 @@ class Enforcer():
             @functools.wraps(f)
             def wrapper_function(*args, **kws):
                 role_exists_in_acl, username, email, wcf_from_token, msg = \
-                self.extract_roles_from_verified_token_n_compare_acl_map(rule_name, role_acl_map_file,
-                                                                       verified_token)
+                self.extract_roles_from_verified_token_n_compare_acl_map(rule_name)
                 #print(role_exists_in_acl, wcf_from_token)
                 if wcf_from_token:
                     WFC.setcontext(username, email, wcf_from_token)
