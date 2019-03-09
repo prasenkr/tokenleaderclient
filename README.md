@@ -2,6 +2,16 @@
 New feature and major changes
 ================================
 
+ver 1.2
+----------------------------------------------
+Enforcer can now be instanciated with test_token and role_acl_map_file
+
+
+enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=sample_token_role_as_list_valid_role)
+
+This will enable  all the actual  rest api to be tested with test enforcer without  running tokenleader 
+
 ver 1.1 
 ----------------------
 username and email made available to api route functions through enforcer. function now can extract it from the manadatory 
