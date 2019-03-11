@@ -1,6 +1,10 @@
 
 New feature and major changes
 ================================
+ver 1.3
+-------------------------------------------
+request_id , time_stamp and client_address  is included in wfc . 
+
 
 ver 1.2
 ----------------------------------------------
@@ -318,6 +322,8 @@ d. Work Function Context for further granular control of who can see what based 
 		'''
 		    msg = ("enforcer decorator working ok with wfc org = {},"
 		            "orgunit={}, dept={}".format(wfc.org, wfc.orgunit, wfc.department))
+		    print("requestid: {}, date: {}, client_address:{}".format(
+        						wfc.request_id,  wfc.time_stamp, wfc.client_address))
 		  
 		    return msg
 	  

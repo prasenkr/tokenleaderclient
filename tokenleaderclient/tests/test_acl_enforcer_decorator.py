@@ -95,7 +95,11 @@ enforcer_sample_token = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
 @enforcer_sample_token.enforce_access_rule_with_token('service1:first_api:rulename1')
 def acl_enforcer_func_for_test(wfc=None):
     msg = ("enforcer decorator working ok with wfc org = {},"
-            "orgunit={}, dept={}".format(wfc.org, wfc.orgunit, wfc.department))
+            "orgunit={}, dept={}".format(
+                wfc.org, wfc.orgunit, wfc.department ))
+    print("requestid: {}, date: {}, client_address:{}".format(
+        wfc.request_id,
+                wfc.time_stamp, wfc.client_address))
   
     return msg
  
@@ -156,6 +160,7 @@ class TestAclEnforcer(TestCase):
         
     def test_acl_enforcer_func(self):
         msg = acl_enforcer_func_for_test() 
+        print(msg)
         self.assertTrue(msg == txt)
         
     def test_acl_enforcer_func_user_input(self):
@@ -164,6 +169,7 @@ class TestAclEnforcer(TestCase):
     
     def test_acl_enforcer_func_multirole(self):
         msg = acl_enforcer_func_for_test()
+        print(msg)
         self.assertTrue(msg == txt)
           
     def test_acl_enforcer_role_mismatched(self):        

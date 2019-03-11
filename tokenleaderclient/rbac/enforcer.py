@@ -131,7 +131,7 @@ class Enforcer():
                 if wcf_from_token:
                     WFC.setcontext(username, email, wcf_from_token)
                     #print(WFC.org)
-                    kws['wfc'] = WFC
+                    kws['wfc'] = WFC                    
                 if role_exists_in_acl:
                     
                         return f(*args, **kws)
