@@ -88,7 +88,7 @@ def main():
         print(c.verify_token(options.token))
     
     if  sys.argv[1] == 'list':
-        if options.entity == 'users':
+        if options.entity == 'user':
          if options.name:
             print(c.list_user_byname(options.name))
          else:
