@@ -118,9 +118,9 @@ def main():
     if  sys.argv[1] == 'list':
         if options.entity == 'ou':
           if options.name:
-            print(c.list_ou_byname(options.name))
+            print(c.list_ouX_byname(options.name))
           else:
-            print(c.list_oux())
+            print(c.list_ou())
             
 
     
