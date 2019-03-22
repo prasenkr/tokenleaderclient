@@ -120,7 +120,7 @@ def main():
           if options.name:
             print(c.list_ou_byname(options.name))
           else:
-            print(c.list_ou())
+            print(c.list_oux())
             
 
     
