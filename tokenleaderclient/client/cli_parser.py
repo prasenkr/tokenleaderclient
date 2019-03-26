@@ -65,16 +65,104 @@ delete_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
+add_parser = subparser.add_parser('add', help='List contents')
+add_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'role' ])
+add_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the entitiy , type 'all' as name while listing ",
+                  )
 
-adduser_parser = subparser.add_parser('adduser', help='user add' )
+add_parser.add_argument('--orgtype' , action = "store", dest = "orgtype",
+                  required = False,
+                  help = "internal or external org , to be used while registtering org ",
+                  default = "internal")
+
+addwfc_parser = subparser.add_parser('addwfc', help='add a wfc , work function context ')
+addwfc_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the wfc simple string ,",
+                  )
+addwfc_parser.add_argument('--wfcorg' , action = "store", dest = "wfcorg",
+                  required = True,
+                  help = "org  name linked with the wfc , to be used while registtering wfc ",
+                  ) 
+addwfc_parser.add_argument('--wfcou' , action = "store", dest = "wfcou",
+                  required = True,
+                  help = "org  unit name linked with the wfc , to be used while registtering wfc ",
+                  ) 
+addwfc_parser.add_argument('--wfcdept' , action = "store", dest = "wfcdept",
+                  required = True,
+                  help = "dept name linked with the wfc , to be used while registtering wfc ",
+                  ) 
+
+adduser_parser = subparser.add_parser('adduser', help='List contents')
 adduser_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
                   required = True,
-                  help = "Name of the User",
+                  help = "Name of the user",
+                  )
+adduser_parser.add_argument('--password' , action = "store", dest = "password",
+                  required = True,
+                  help = "password for the user ",
+                  )
+adduser_parser.add_argument('--emailid' , action = "store", dest = "emailid",
+                  required = True,
+                  help = "email id of  the user ",
+                  )
+adduser_parser.add_argument('--rolenames' , action = "store", dest = "rolenames",
+                  required = True,
+                  help = "comma separed names of roles which were already registered in the role db.\
+                   there should not be any space beteween the role names. \
+                   examaple  , --rolenames role1,role2,role3 " 
+                  )  
+adduser_parser.add_argument('--wfc' , action = "store", dest = "wfc",
+                  required = True,
+                  help = "wfc or work function context name " 
+                  ) 
+
+addservice_parser = subparser.add_parser('addservice', help='add a service in the service catalog')
+addservice_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the microservice",
+                  )
+addservice_parser.add_argument('--password' , action = "store", dest = "password",
+                  required = False,
+                  help = "service account name password, this password will \
+                  be used for intra service communication",
+                  ) 
+addservice_parser.add_argument('--urlext' , action = "store", dest = "urlext",
+                  required = False,
+                  help = "url of the service endpoint , that is avilable to all users ",
+                  ) 
+addservice_parser.add_argument('--urlint' , action = "store", dest = "urlint",
+                  required = True,
+                  help = "url of the service endpoint , that is used for service to service \
+                  communication and is not avilable to all users. This is useful when service network and \
+                  user network is different",
+                  )
+addservice_parser.add_argument('--urladmin' , action = "store", dest = "urladmin",
+                  required = False,
+                  help = "url of the service endpoint , that is used for admin activities. \
+                  This is useful to segregte the admin network from user and service network",
+                  ) 
+
+
+deletservice_parser = subparser.add_parser('deletservice', help='delete a service from service catalog')
+deletservice_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the microservice",
                   )
 
-
-
+listservice_parser = subparser.add_parser('listservice', help='List a service from service catalog')
+listservice_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the microservice",
+                  )
 
 
 
