@@ -37,7 +37,7 @@ parent_parser.add_argument('--authpwd', action = "store", dest = "authpwd", requ
 subparser = parent_parser.add_subparsers()
 
 token_parser = subparser.add_parser('gettoken', parents=[parent_parser], help="Get a token from the tokenleader server ,"
-                                    " configure {} and generate the auth file using tlconfig command before"
+                                    " configure {} and generate the auth file using tlconfig command before "
                                     "getting a token".format(auth_config.config_file))
 
 token_parser = subparser.add_parser('verify', help='verify  a token' )
@@ -56,6 +56,20 @@ list_parser.add_argument('-n', '--name',
                   required = False,
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
+
+adduser_parser = subparser.add_parser('adduser', help='user add' )
+adduser_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the User",
+                  )
+
+
+
+
+
+
+
 
 
 try:                    
