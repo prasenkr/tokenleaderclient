@@ -57,6 +57,15 @@ list_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
+delete_parser = subparser.add_parser('delete', help='delete entity')
+delete_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
+delete_parser.add_argument('-n', '--name', 
+                  action = "store", dest = "name",
+                  required = True,
+                  help = "Name of the entitiy , type 'all' as name while listing ",
+                  )
+
+
 adduser_parser = subparser.add_parser('adduser', help='user add' )
 adduser_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
