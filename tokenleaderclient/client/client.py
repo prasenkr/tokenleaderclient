@@ -120,7 +120,7 @@ class Client():
 #         print(r_dict)  # for displaying from the cli  print in cli parser
         return r_dict
 
-    def list_dept(self):
+    def list_depts(self):
         token = self.get_token().get('auth_token')
         api_route = '/list/dept'
         service_endpoint = self.tl_url + api_route
