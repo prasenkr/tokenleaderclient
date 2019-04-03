@@ -49,7 +49,7 @@ token_parser.add_argument('-t', '--token',
                         "and put it in tl_public_key section of {}".format(auth_config.config_file)
                   )
 
-list_parser = subparser.add_parser('list', help='list entity ' )
+list_parser = subparser.add_parser('list', help='list entity: org,ou,dept,wfc,role,user ' )
 list_parser.add_argument('-e', '--entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
 list_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
@@ -57,7 +57,7 @@ list_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
-delete_parser = subparser.add_parser('delete', help='delete entity')
+delete_parser = subparser.add_parser('delete', help='delete entity: org,ou,dept,wfc,role,user')
 delete_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
 delete_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
@@ -65,7 +65,7 @@ delete_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
-add_parser = subparser.add_parser('add', help='add entity')
+add_parser = subparser.add_parser('add', help='add entity: org,ou,dept,wfc,role,user')
 add_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'role' ])
 add_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
