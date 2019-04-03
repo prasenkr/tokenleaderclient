@@ -24,6 +24,9 @@ apppath = (os.path.join(possible_topdir,
 sys.path.insert(0, apppath)
 
 #print(sys.path)
+from tokenleader.app1.adminops import  admin_functions as af
+from tokenleader.app1.catalog import  catalog_functions as cf
+
 from tokenleaderclient.configs.config_handler import Configs
 from tokenleaderclient.client.client  import Client
 auth_config = Configs()
@@ -233,7 +236,22 @@ def main():
           else:
             print(c.list_ou())
             
-
+    if  sys.argv[1] == 'add':
+        
+        if options.entity == 'org':      
+            af.register_org(options.name)
+               
+        
+        if options.entity == 'ou':      
+            af.register_ou(options.name)
+                
+                
+        if options.entity == 'dept':      
+            af.register_dept(options.name)
+          
+                
+        if options.entity == 'role':
+            af.register_role(options.name)
     
 if __name__ == '__main__':
     main()
