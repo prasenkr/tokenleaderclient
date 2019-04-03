@@ -128,11 +128,11 @@ addservice_parser.add_argument('-n', '--name',
                   required = True,
                   help = "Name of the microservice",
                   )
-addservice_parser.add_argument('--password' , action = "store", dest = "password",
-                  required = False,
-                  help = "service account name password, this password will \
-                  be used for intra service communication",
-                  ) 
+# addservice_parser.add_argument('--password' , action = "store", dest = "password",
+#                   required = False,
+#                   help = "service account name password, this password will \
+#                   be used for intra service communication",
+#                   ) 
 addservice_parser.add_argument('--urlext' , action = "store", dest = "urlext",
                   required = False,
                   help = "url of the service endpoint , that is avilable to all users ",
