@@ -146,3 +146,12 @@ class Client():
         r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict
+    
+    def add_user(self):
+        token = self.get_token().get('auth_token')
+        api_route = '/add/user'
+        service_endpoint = self.tl_url + api_route
+        headers={'X-Auth-Token': token}
+        r = requests.post(service_endpoint, headers=headers, verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict    
