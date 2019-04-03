@@ -165,6 +165,6 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict    
     
-    def add_user(self, listdata):
-        r_dict = self.post_request('/add/user', listdata )
+    def add_user(self):
+        r_dict = self.post_request('/add/user')
         return r_dict
