@@ -240,12 +240,7 @@ def main():
         r = c.add_user(options.name)
         print(r)
             
-    if  sys.argv[1] == 'adduser':
-        
-        if options.entity == 'org':      
-            af.register_org(options.name)  
-            
-                      
+                    
             
     if  sys.argv[1] == 'add':
         
