@@ -65,7 +65,7 @@ delete_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
-add_parser = subparser.add_parser('add', help='add entity: org,ou,dept,wfc,role,user')
+add_parser = subparser.add_parser('add', help='add entity except user: org,ou,dept,wfc,role')
 add_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'role' ])
 add_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
@@ -97,7 +97,7 @@ addwfc_parser.add_argument('--wfcdept' , action = "store", dest = "wfcdept",
                   help = "dept name linked with the wfc , to be used while registtering wfc ",
                   ) 
 
-adduser_parser = subparser.add_parser('adduser', help='List contents')
+adduser_parser = subparser.add_parser('adduser', help='Add User')
 adduser_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
                   required = True,
