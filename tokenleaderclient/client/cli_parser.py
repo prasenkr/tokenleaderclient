@@ -24,8 +24,8 @@ apppath = (os.path.join(possible_topdir,
 sys.path.insert(0, apppath)
 
 #print(sys.path)
-from tokenleader.app1.adminops import  admin_functions as af
-from tokenleader.app1.catalog import  catalog_functions as cf
+# from tokenleader.app1.adminops import  admin_functions as af
+# from tokenleader.app1.catalog import  catalog_functions as cf
 
 from tokenleaderclient.configs.config_handler import Configs
 from tokenleaderclient.client.client  import Client
