@@ -236,6 +236,17 @@ def main():
           else:
             print(c.list_ou())
             
+    if  sys.argv[1] == 'adduser':
+        r = c.add_user(options.name)
+        print(r)
+            
+    if  sys.argv[1] == 'adduser':
+        
+        if options.entity == 'org':      
+            af.register_org(options.name)  
+            
+                      
+            
     if  sys.argv[1] == 'add':
         
         if options.entity == 'org':      
