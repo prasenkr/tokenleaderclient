@@ -65,7 +65,7 @@ delete_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
-add_parser = subparser.add_parser('add', help='List contents')
+add_parser = subparser.add_parser('add', help='add entity')
 add_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'role' ])
 add_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
