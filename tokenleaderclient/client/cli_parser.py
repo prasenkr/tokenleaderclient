@@ -49,7 +49,7 @@ token_parser.add_argument('-t', '--token',
                         "and put it in tl_public_key section of {}".format(auth_config.config_file)
                   )
 
-list_parser = subparser.add_parser('list', help='listuser' )
+list_parser = subparser.add_parser('list', help='list entity ' )
 list_parser.add_argument('-e', '--entity', choices=['org', 'ou', 'dept', 'wfc', 'role', 'user' ])
 list_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
