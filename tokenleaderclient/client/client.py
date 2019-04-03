@@ -156,7 +156,7 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
     
-    def add_user(self):
+    def add_userx(self):
         token = self.get_token().get('auth_token')
         api_route = '/add/user'
         service_endpoint = self.tl_url + api_route
@@ -164,3 +164,7 @@ class Client():
         r = requests.post(service_endpoint, headers=headers, verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict    
+    
+    def add_user(self, listdata):
+        r_dict = self.post_request('/add/user', listdata )
+        return r_dict
