@@ -129,7 +129,7 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
 
-    def list_role(self):
+    def list_rolex(self):
         token = self.get_token().get('auth_token')
         api_route = '/list/role'
         service_endpoint = self.tl_url + api_route
