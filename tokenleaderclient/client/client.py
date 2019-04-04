@@ -358,3 +358,19 @@ class Client():
                           verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict       
+    
+    def delete_service(self, data):
+        '''
+        data = {"name": "testservice"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/delete/service'
+        service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.delete(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict       
