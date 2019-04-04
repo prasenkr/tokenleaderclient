@@ -234,6 +234,6 @@ class Client():
                           headers=headers, 
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
-        r_dict = self.handle_response(r)
+        r_dict = self.delete_response(r)
         return r_dict      
   
