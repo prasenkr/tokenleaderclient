@@ -249,7 +249,7 @@ def main():
                
         
         if options.entity == 'ou':      
-            r = c.add_orgunit()
+            r = c.add_orgunit_byname(options.name)
         print(r)
                 
                 
