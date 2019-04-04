@@ -229,12 +229,12 @@ class Client():
         token = self.get_token().get('auth_token')
         api_route = '/delete/user'
         service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
         headers={'X-Auth-Token': token, 'content-type':'application/json' }
         r = requests.delete(service_endpoint, 
                           headers=headers, 
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
-        print(r)
         r_dict = json.loads(r.content.decode())
         return r_dict      
 #       return r
