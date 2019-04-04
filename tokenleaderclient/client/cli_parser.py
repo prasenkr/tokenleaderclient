@@ -68,7 +68,7 @@ delete_parser.add_argument('-n', '--name',
                   help = "Name of the entitiy , type 'all' as name while listing ",
                   )
 
-add_parser = subparser.add_parser('add', help='add entity except user: org,ou,dept,wfc,role')
+add_parser = subparser.add_parser('add', help='add entity for all except except user: org,ou,dept,wfc,role')
 add_parser.add_argument('entity', choices=['org', 'ou', 'dept', 'role' ])
 add_parser.add_argument('-n', '--name', 
                   action = "store", dest = "name",
@@ -249,7 +249,8 @@ def main():
                
         
         if options.entity == 'ou':      
-            af.register_ou(options.name)
+            r = c.add_ou()
+        print(r)
                 
                 
         if options.entity == 'dept':      
