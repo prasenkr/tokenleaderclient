@@ -158,12 +158,12 @@ class Client():
     
     def add_user(self, data):
         '''
-        data = {"name": name, "email": email, "password": password, "wfc": wfc, "roles": roles}
+        data = {"name": "user5", "email": "user5", "password": "user5", "wfc": "wfc1", "roles": "roles1"}
         '''
         token = self.get_token().get('auth_token')
         api_route = '/add/user'
         service_endpoint = self.tl_url + api_route
-        headers={'X-Auth-Token': token}
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
         r = requests.post(service_endpoint, 
                           headers=headers, 
                           data=json.dumps(data), 
