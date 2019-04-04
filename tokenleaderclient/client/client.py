@@ -256,7 +256,7 @@ class Client():
     
     def delete_ou(self, data):
         '''
-        data = {"ouname": "org5"}
+        data = {"ouname": "ou5"}
         '''
         token = self.get_token().get('auth_token')
         api_route = '/delete/ou'
@@ -268,4 +268,52 @@ class Client():
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
-        return r_dict          
+        return r_dict  
+    
+    def delete_dept(self, data):
+        '''
+        data = {"deptname": "dept5"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/delete/dept'
+        service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.delete(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict     
+    
+    def delete_role(self, data):
+        '''
+        data = {"rolename": "role5"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/delete/role'
+        service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.delete(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict      
+    
+    def delete_wfc(self, data):
+        '''
+        data = {"wfcname": "wfc5"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/delete/dept'
+        service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.delete(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict                
