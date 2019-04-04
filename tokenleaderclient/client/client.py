@@ -149,7 +149,7 @@ class Client():
     
     def add_orgunit(self,data):
         '''
-        data = {"name": "ou5",}
+        data = {"ouname": "ou5",}
         '''
         token = self.get_token().get('auth_token')
         api_route = '/add/ou'
