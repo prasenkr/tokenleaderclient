@@ -140,7 +140,7 @@ class Client():
 
     def list_ou(self):
         token = self.get_token().get('auth_token')
-        api_route = '/list/ou'
+        api_route = '/list/ou/<ouname>'
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token}
         r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
@@ -156,14 +156,24 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
     
-    def add_user(self):
+    def add_user(self, data):
+        '''
+        data = {"name": name, "email": email, "password": password, "wfc": wfc, "roles": roles}
+        '''
         token = self.get_token().get('auth_token')
         api_route = '/add/user'
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token}
-        r = requests.post(service_endpoint, headers=headers, verify=self.ssl_verify)
+        r = requests.post(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
-        return r_dict    
+        return r_dict   
+    
+  
+
+
     
 #     def add_user(self):
 #         r_dict = self.post_request('/add/user')
