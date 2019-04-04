@@ -231,7 +231,7 @@ class Client():
         service_endpoint = self.tl_url + api_route
         print(service_endpoint)
         headers={'X-Auth-Token': token, 'content-type':'application/json' }
-        r = requests.delete(service_endpoint, 
+        r = requests.post(service_endpoint, 
                           headers=headers, 
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
