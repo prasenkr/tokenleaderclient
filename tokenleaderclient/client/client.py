@@ -162,6 +162,21 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
     
+    def add_dept(self, data):
+        '''
+        data = {"deptname": "dept5",}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/add/dept'
+        service_endpoint = self.tl_url + api_route
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.post(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data),
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict    
+    
     def add_user(self, data):
         '''
         data = {"name": "user5", "email": "user5", "password": "user5", "wfc": "wfc1", "roles": "roles1"}
