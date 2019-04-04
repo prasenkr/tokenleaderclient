@@ -147,10 +147,11 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
     
-    def add_orgunit(self,data):
+    def add_orgunit(self, data):
         '''
         data = {"ouname": "ou5",}
         '''
+        data='ouname'
         token = self.get_token().get('auth_token')
         api_route = '/add/ou'
         service_endpoint = self.tl_url + api_route
