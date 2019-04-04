@@ -151,7 +151,6 @@ class Client():
         '''
         data = {"ouname": "ou5",}
         '''
-        data='ouname'
         token = self.get_token().get('auth_token')
         api_route = '/add/ou'
         service_endpoint = self.tl_url + api_route
