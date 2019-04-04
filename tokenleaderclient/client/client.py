@@ -323,7 +323,7 @@ class Client():
         data = {"wfcname": "wfc5"}
         '''
         token = self.get_token().get('auth_token')
-        api_route = '/delete/dept'
+        api_route = '/delete/wfc'
         service_endpoint = self.tl_url + api_route
         print(service_endpoint)
         headers={'X-Auth-Token': token, 'content-type':'application/json' }
