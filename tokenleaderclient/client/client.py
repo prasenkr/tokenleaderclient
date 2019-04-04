@@ -152,7 +152,7 @@ class Client():
         data = {"name": "ou5",}
         '''
         token = self.get_token().get('auth_token')
-        api_route = '/add/ou'
+        api_route = '/add/ou/<ouname>'
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token, 'content-type':'application/json' }
         r = requests.post(service_endpoint, 
