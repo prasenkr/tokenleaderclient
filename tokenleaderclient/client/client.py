@@ -240,7 +240,7 @@ class Client():
 
     def delete_org(self, data):
         '''
-        data = {"orgname": "org5"}
+        data = {"oname": "org5"}
         '''
         token = self.get_token().get('auth_token')
         api_route = '/delete/org'
@@ -252,4 +252,20 @@ class Client():
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
-        return r_dict      
+        return r_dict  
+    
+    def delete_ou(self, data):
+        '''
+        data = {"ouname": "org5"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/delete/ou'
+        service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.delete(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict          
