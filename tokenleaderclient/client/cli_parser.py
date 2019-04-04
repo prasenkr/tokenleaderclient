@@ -237,7 +237,7 @@ def main():
             print(c.list_ou())
             
     if  sys.argv[1] == 'adduser':
-        r = c.add_user(options.name)
+        r = c.add_user()
         print(r)
             
                     
