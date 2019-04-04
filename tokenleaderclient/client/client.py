@@ -231,10 +231,10 @@ class Client():
         service_endpoint = self.tl_url + api_route
         print(service_endpoint)
         headers={'X-Auth-Token': token, 'content-type':'application/json' }
-        r = requests.post(service_endpoint, 
+        r = requests.delete(service_endpoint, 
                           headers=headers, 
                           data=json.dumps(data), 
                           verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict      
-#       return r
+
