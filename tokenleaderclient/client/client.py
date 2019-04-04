@@ -341,4 +341,20 @@ class Client():
         headers={'X-Auth-Token': token}
         r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
-        return r_dict         
+        return r_dict     
+    
+    def add_service(self, data):
+        '''
+        data_must_contain = ['name', 'urlint', 'urlext','urladmin']
+        data = {"name": "testservice", "urlint": "http//:localhost:5005", "urlext": "http//:localhost:5005", "urladmin": "http//:localhost:5005"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/add/service'
+        service_endpoint = self.tl_url + api_route
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.post(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict       
