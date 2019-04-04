@@ -1,6 +1,7 @@
 *.pyc
 .pyc
 venv
+.project
 __pycache__
 /dist/
 /*.egg-info
