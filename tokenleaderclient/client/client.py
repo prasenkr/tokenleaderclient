@@ -221,7 +221,23 @@ class Client():
                           verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict   
- 
+    
+    def add_wfc(self, data):
+        '''
+        data_must_contain = ['fname', 'orgname', 'ou_name', 'dept_name']
+        data = {"fname": "wfc6", "orgname": "org1", "ou_name": "ou1", "dept_name": "dept1"}
+        '''
+        token = self.get_token().get('auth_token')
+        api_route = '/add/wfc'
+        service_endpoint = self.tl_url + api_route
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.post(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data), 
+                          verify=self.ssl_verify)
+        r_dict = json.loads(r.content.decode())
+        return r_dict   
+    
     def delete_user(self, data):
         '''
         data = {"username": "user5"}
