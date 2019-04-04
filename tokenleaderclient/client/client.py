@@ -147,12 +147,18 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict
     
-    def add_orgunit(self):
+    def add_orgunit(self,data):
+        '''
+        data = {"name": "ou5",}
+        '''
         token = self.get_token().get('auth_token')
         api_route = '/add/ou'
         service_endpoint = self.tl_url + api_route
-        headers={'X-Auth-Token': token}
-        r = requests.post(service_endpoint, headers=headers, verify=self.ssl_verify)
+        headers={'X-Auth-Token': token, 'content-type':'application/json' }
+        r = requests.post(service_endpoint, 
+                          headers=headers, 
+                          data=json.dumps(data),
+                          verify=self.ssl_verify)
         r_dict = json.loads(r.content.decode())
         return r_dict
     
