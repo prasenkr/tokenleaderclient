@@ -18,4 +18,10 @@ sys.path.insert(0, apppath)
 from tokenleaderclient.client.cli_parser import main
 
 if __name__ == '__main__':
+<<<<<<< HEAD
 	main()
+=======
+	main()
+
+	
+>>>>>>> 8439fa698f293f7518abc3514db3bcaee7b9f8cd
