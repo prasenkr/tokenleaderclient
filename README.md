@@ -1,6 +1,32 @@
 
 New feature and major changes
 ================================
+ver 1.3
+-------------------------------------------
+request_id , time_stamp and client_address  is included in wfc . 
+
+
+ver 1.2
+----------------------------------------------
+Enforcer can now be instanciated with test_token and role_acl_map_file
+
+
+enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=sample_token_role_as_list_valid_role)
+
+This will enable  all the actual  rest api to be tested with test enforcer without  running tokenleader 
+
+ver 1.1 
+----------------------
+username and email made available to api route functions through enforcer. function now can extract it from the manadatory 
+wfc param 
+
+ver 1.0
+-----------------
+more api routes for listing objects 
+
+tokenleader list -e <object name e.g user, org, ou , role  etc. > 
+
 ver 0.71 
 -------------------------
 
@@ -123,9 +149,40 @@ Inititialize the client with auth_config
 	 
 		c = Client(auth_config)
 		c.get_token()
-		{'message': 'success', 'status': 'success', 'auth_token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg', 'service_catalog': {'tokenleader': {'endpoint_url_external': 'localhost:5001', 'endpoint_url_admin': None, 'id': 2, 'endpoint_url_internal': None, 'name': 'tokenleader'}, 'micros1': {'endpoint_url_external': 'localhost:5002', 'endpoint_url_admin': None, 'id': 1, 'endpoint_url_internal': None, 'name': 'micros1'}}}
+
+{'service_catalog': 
+                    {'tokenleader': 
+                                   {'endpoint_url_admin': None, 
+                                   'endpoint_url_external': None, 
+                                   'name': 'tokenleader', 
+                                   'endpoint_url_internal': 'localhost:5001', 
+                                   'id': 1}, 
+                    'linkInventory': {'endpoint_url_admin': None, 
+                    'endpoint_url_external': 'https://192.168.111.141:5004', 
+                    'name': 'linkInventory', 
+                    'endpoint_url_internal': 'https://192.168.111.141:5004', 
+                    'id': 2}}, 
+'status': 'success', 
+'message': 'success', 
+'auth_token': 'AA'}
+		
+{'message': 'success', 'status': 'success', 'auth_token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg', 'service_catalog': {'tokenleader': {'endpoint_url_external': 'localhost:5001', 'endpoint_url_admin': None, 'id': 2, 'endpoint_url_internal': None, 'name': 'tokenleader'}, 'micros1': {'endpoint_url_external': 'localhost:5002', 'endpoint_url_admin': None, 'id': 1, 'endpoint_url_internal': None, 'name': 'micros1'}}}
+		
 		c.verify_token('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE1NDk5NjcxODAsImV4cCI6MTU0OTk3MDc4MCwic3ViIjp7IndmYyI6eyJvcmd1bml0Ijoib3UxIiwibmFtZSI6IndmYzEiLCJkZXBhcnRtZW50IjoiZGVwdDEiLCJpZCI6MSwib3JnIjoib3JnMSJ9LCJlbWFpbCI6InVzZXIxIiwiaWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlcyI6WyJyb2xlMSJdfX0.gzW0GlgR9qiNLZbR-upuzgHMw5rOm2luV-EnHZwlOSJ-0kJnHsiiT5Wk-HZaqMGZd0YJxA1e9GMroHixtj7WJsbLLjhgqQ5H1ZprCkA9um6-vdkwAFVduWIqIN7S6LbsE036bN7y4cdgVhuJAKoiV1KyxOU1-Hxid5l3inL0Hx2aDUrZ3InzFKBw7Mll86xWdfkpHSdyVjVuayKQMvH2IdT3N15k4O2tSwV3t6UhG6MO0ngHFt3LFR471QWGzJ8UyRzqyqbheuk5vwPk684MfRclCtKx33LWAMf-HXQgVA2py_NzmEiY1ROsKmZqpbIO9YKIO_aFCmzB7DQSI8dcYg')
-		{'payload': {'iat': 1549967180, 'exp': 1549970780, 'sub': {'username': 'user1', 'roles': ['role1'], 'id': 1, 'email': 'user1', 'wfc': {'orgunit': 'ou1', 'id': 1, 'org': 'org1', 'department': 'dept1', 'name': 'wfc1'}}}, 'message': 'Token has been successfully decrypted', 'status': 'Verification Successful'}
+		
+{'payload': {'iat': 1549967180, 
+             'exp': 1549970780, 
+             'sub': {'username': 'user1', 
+                     'roles': ['role1'], 
+                     'id': 1, 
+                     'email': 'user1', 
+                      'wfc': {'orgunit': 'ou1', 
+                              'id': 1, 
+                              'org': 'org1', 
+                              'department': 'dept1', 
+                              'name': 'wfc1'}}}, 
+ 'message': 'Token has been successfully decrypted', 
+ 'status': 'Verification Successful'}
 		
 
 
@@ -266,6 +323,8 @@ d. Work Function Context for further granular control of who can see what based 
 		'''
 		    msg = ("enforcer decorator working ok with wfc org = {},"
 		            "orgunit={}, dept={}".format(wfc.org, wfc.orgunit, wfc.department))
+		    print("requestid: {}, date: {}, client_address:{}".format(
+        						wfc.request_id,  wfc.time_stamp, wfc.client_address))
 		  
 		    return msg
 	  

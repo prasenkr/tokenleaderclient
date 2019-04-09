@@ -334,14 +334,6 @@ class Client():
         r_dict = json.loads(r.content.decode())
         return r_dict       
     
-    def list_services(self):
-        token = self.get_token().get('auth_token')
-        api_route = '/list/services'
-        service_endpoint = self.tl_url + api_route
-        headers={'X-Auth-Token': token}
-        r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
-        r_dict = json.loads(r.content.decode())
-        return r_dict     
     
     def add_service(self, data):
         '''

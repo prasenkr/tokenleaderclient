@@ -7,15 +7,16 @@ from tokenleaderclient.rbac.enforcer import Enforcer
 from tokenleaderclient.client.client import Client
 from tokenleaderclient.tests.base_tests import  conf, conf_from_manual_input
 
-TLClient = Client(conf) 
-enforcer = Enforcer(TLClient)
+role_acl_map_file='tokenleaderclient/tests/testdata/role_to_acl_map.yml'
 
-TLClient_from_user_input = Client(conf_from_manual_input)
-enforcer_user_input = Enforcer(TLClient_from_user_input)
+TLClient = Client(conf) 
+enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file)
+
+
 
 app = flaskapp.create_app()
 
-role_acl_map_file='tokenleaderclient/tests/testdata/role_to_acl_map.yml'
+
 
 sample_token = {"message":"Token has been successfully decrypted",
                           "payload":{"exp":1548487022,
@@ -91,6 +92,11 @@ sample_token_role_as_list_valid_role = {"message":"Token has been successfully d
                           "status":"Verification Successful"}
 
 
+TLClient_from_user_input = Client(conf_from_manual_input)        
+enforcer_user_input = Enforcer(TLClient_from_user_input, role_acl_map_file=role_acl_map_file,
+                            test_token=admin_token)  
+           
+
 
 class TestAcl(TestCase):
     def create_app(self):       
@@ -109,78 +115,73 @@ class TestAcl(TestCase):
         #print(v)
         self.assertTrue(v.get('status') == 'Verification Successful')
         
-    def test_extract_token_data_from_api_request_with_verified_token(self):
-        verified_token = sample_token
-        result = enforcer.extract_token_data_from_api_request(verified_token)
+    def test_extract_token_data_from_api_request_with_verified_token(self):       
+        enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=sample_token)
+
+        result = enforcer.extract_token_data_from_api_request()
         #print(result)
-        self.assertTrue(result == verified_token)
+        self.assertTrue(result == sample_token)
         
                 
     def test_role1_success_compare_role_in_token_with_acl_map(self):
         true_result = enforcer.compare_role_in_token_with_acl_map(
-            'role1', 'service1:first_api:rulename1',
-            role_acl_map_file=role_acl_map_file)
+            'role1', 'service1:first_api:rulename1')
        
         self.assertTrue(true_result)
         
     def test_role2_success_compare_role_in_token_with_acl_map(self):
         true_result = enforcer.compare_role_in_token_with_acl_map(
-            'role2', 'service1:third_api:rulename3',
-            role_acl_map_file=role_acl_map_file)
+            'role2', 'service1:third_api:rulename3')
        
         self.assertTrue(true_result)
     
     def test_role4_success_with_rule1_compare_role_in_token_with_acl_map(self):
         true_result = enforcer.compare_role_in_token_with_acl_map(
-            'role4', 'service1:first_api:rulename1',
-            role_acl_map_file=role_acl_map_file)
+            'role4', 'service1:first_api:rulename1')
        
         self.assertTrue(true_result)
     
     def test_role4_success_with_rule7_compare_role_in_token_with_acl_map(self):
         true_result = enforcer.compare_role_in_token_with_acl_map(
-            'role4', 'service1:7api_api:rulename7',
-            role_acl_map_file=role_acl_map_file)
+            'role4', 'service1:7api_api:rulename7')
        
         self.assertTrue(true_result)
         
     def test_role4_success_with_rule4_compare_role_in_token_with_acl_map(self):
         true_result = enforcer.compare_role_in_token_with_acl_map(
-            'role4', 'service1:fourthapi_api:rulename4',
-            role_acl_map_file=role_acl_map_file)
+            'role4', 'service1:fourthapi_api:rulename4')
        
         self.assertTrue(true_result)
         
     
     def test_rule_mismatch_compare_role_in_token_with_acl_map(self):        
         false_result = enforcer.compare_role_in_token_with_acl_map(
-            'rule1', 'rule_mismatched',
-            role_acl_map_file=role_acl_map_file)
+            'rule1', 'rule_mismatched')
                 
         self.assertFalse(false_result)
         
         
     def test_role_mismatch_compare_role_in_token_with_acl_map(self):        
         false_result = enforcer.compare_role_in_token_with_acl_map(
-            'rule_mismatched', 'service1:first_api:rulename1',
-            role_acl_map_file=role_acl_map_file)
+            'rule_mismatched', 'service1:first_api:rulename1')
                 
-        self.assertFalse(false_result)   
-   
-    
-    
+        self.assertFalse(false_result)    
    
         
-    def extract_roles_from_verified_token_n_compare_acl_map_invalid_role(self):
-        verified_token = sample_token_role_as_list_nonexisting
-        result_false, _, _ = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
-            'service1:first_api:rulename1', role_acl_map_file, verified_token)
+    def test_extract_roles_from_verified_token_n_compare_acl_map_invalid_role(self):        
+        enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=sample_token_role_as_list_nonexisting)
+        result_false, _,_,_,_ = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
+            'service1:first_api:rulename1')
         self.assertFalse(result_false)
     
-    def extract_roles_from_verified_token_n_compare_acl_map_valid_role(self):
-        verified_token = sample_token_role_as_list_valid_role
-        result_true, wfc, _  = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
-            'service1:first_api:rulename1', role_acl_map_file, verified_token)
+    
+    def test_extract_roles_from_verified_token_n_compare_acl_map_valid_role(self):        
+        enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=sample_token_role_as_list_valid_role)
+        result_true, _, _, wfc, _ = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
+            'service1:first_api:rulename1')
         #print(result_true)
         self.assertEqual(result_true, True)
         
@@ -189,19 +190,22 @@ class TestAcl(TestCase):
                                'department': 'dept1',
                                'orgunit': 'ou1', 
                                'name': 'wfc1'})
-    def extract_roles_from_verified_token_n_compare_acl_map_admin_role(self):    
-        verified_token = admin_token        
-        result_true, wfc, _  = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
-            'service1:first_api:rulename1', role_acl_map_file, verified_token)
+        
+        
+    def test_extract_roles_from_verified_token_n_compare_acl_map_admin_role(self):                    
+        enforcer = Enforcer(TLClient, role_acl_map_file=role_acl_map_file,
+                            test_token=admin_token)
+        result_true, _, _, wfc, _  = enforcer.extract_roles_from_verified_token_n_compare_acl_map(
+            'service1:first_api:rulename1')
         print(result_true)
         self.assertEqual(result_true, True)
         
         
     
-    def extract_roles_from_verified_token_n_compare_acl_map_admin_role_manual_input(self):    
-        verified_token = admin_token        
-        result_true, wfc, _  = enforcer_user_input.extract_roles_from_verified_token_n_compare_acl_map(
-            'service1:first_api:rulename1', role_acl_map_file, verified_token)
+    def test_extract_roles_from_verified_token_n_compare_acl_map_admin_role_manual_input(self):    
+        
+        result_true, _, _,  wfc, _  = enforcer_user_input.extract_roles_from_verified_token_n_compare_acl_map(
+            'service1:first_api:rulename1')
         print(result_true)
         self.assertEqual(result_true, True)
         
