@@ -186,7 +186,7 @@ Inititialize the client with auth_config
 		
 
 
-for RBAC configure  /etc/tokenleader/role_to_aclmap.yml
+for RBAC configure  /etc/tokenleader/role_to_acl_map.yml
 ============================================================================================
 	
       sudo mkdir /etc/tokenleader 
