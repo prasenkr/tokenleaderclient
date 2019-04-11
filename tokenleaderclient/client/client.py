@@ -22,8 +22,8 @@ class Client():
     def get_token(self):
         api_route = '/token/gettoken'
         service_endpoint = self.tl_url + api_route
+        print(service_endpoint)
         headers={'content-type':'application/json'}
-        print(headers)
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
         print(self.data)
         try:
