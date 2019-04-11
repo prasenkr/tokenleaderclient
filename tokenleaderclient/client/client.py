@@ -30,7 +30,7 @@ class Client():
             r_dict = json.loads(r.content.decode())
         except Exception as e:
             r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}
-        #print(r_dict)
+        print(r_dict)
         return r_dict 
               
     
