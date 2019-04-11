@@ -24,7 +24,7 @@ class Client():
         service_endpoint = self.tl_url + api_route
         headers={'content-type':'application/json'}
         print(headers)
-        self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
+        self.data=json.dumps(dict(password=self.tl_password ,username=self.tl_username))
         print(self.data)
         try:
             r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
