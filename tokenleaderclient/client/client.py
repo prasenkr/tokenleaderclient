@@ -27,10 +27,11 @@ class Client():
         print(self.data)
         try:
             r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
+            print(r)
             r_dict = json.loads(r.content.decode())
         except Exception as e:
             r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}
-        print(r_dict)
+        #print(r_dict)
         return r_dict 
               
     
