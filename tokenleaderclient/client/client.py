@@ -25,7 +25,7 @@ class Client():
         #print(service_endpoint)
         headers={'content-type':'application/json'}
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
-        print(self.data)
+        #print(self.data)
         try:
             r = requests.post(service_endpoint, self.data, headers=headers, verify=self.ssl_verify)
             r_dict = json.loads(r.content.decode())
