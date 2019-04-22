@@ -218,9 +218,11 @@ def main():
     if  sys.argv[1] == 'list':
         if options.entity == 'org':
          if options.name:
-            print(c.list_org_byname(options.name))
+        	print(c.list_org())
+            #print(c.list_org_byname(options.name))
          else:
-            print(c.list_org())
+           print(c.list_org_byname(options.name))
+            #print(c.list_org())
 
     if  sys.argv[1] == 'list':
         if options.entity == 'role':
