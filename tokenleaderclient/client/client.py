@@ -119,7 +119,7 @@ class Client():
         headers={'X-Auth-Token': token}   
         try:
             r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)           
-            r_dict = json.loads(r.content.decode())
+            r_dict = json.loads(r.content)
         except Exception as e:
         	r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}            
             
