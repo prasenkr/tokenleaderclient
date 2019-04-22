@@ -22,7 +22,7 @@ class Client():
     def get_token(self):
         api_route = '/token/gettoken'
         service_endpoint = self.tl_url + api_route
-        print(service_endpoint)
+        #print(service_endpoint)
         headers={'content-type':'application/json'}
         self.data=json.dumps(dict(username=self.tl_username, password=self.tl_password))
         print(self.data)
@@ -122,7 +122,7 @@ class Client():
             r_dict = json.loads(r.content.decode())
         except Exception as e:
         	r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}            
-            #print(r)  # for displaying from the cli  print in cli parser
+            
         return r_dict
 
     def list_dept(self):
