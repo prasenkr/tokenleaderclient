@@ -1,7 +1,7 @@
 
 New feature and major changes
 ================================
-ver 0.71 
+ver 1.5
 -------------------------
 
 1. Before the client instanciation , we need a auth_config instance 
