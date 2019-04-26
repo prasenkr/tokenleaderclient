@@ -12,7 +12,7 @@ class Client():
         initialized by the user of the client
         ''' 
         self.tl_username = auth_config.tl_user
-        #auth_config.decrypt_password()
+        auth_config.decrypt_password()
         self.tl_password = auth_config.tl_password  
         self.tl_url = auth_config.tl_url    
         self.ssl_verify = auth_config.ssl_verify     
