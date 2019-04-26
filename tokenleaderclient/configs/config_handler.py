@@ -48,7 +48,8 @@ class Configs():
                 self.tl_user = tlusr
                 self.tl_password = tlpwd
             else:
-                self.tl_user = self.general_config['tl_user']                             
+                self.tl_user = self.general_config['tl_user']   
+                self.tl_password = self.decrypt_password()
                 
         else:
             print("{} file must have the following sections {}".format(
