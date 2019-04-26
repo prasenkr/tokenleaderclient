@@ -222,7 +222,7 @@ class Client():
     
     def add_user(self, data):
         '''
-        data = {"username": "user5", "email": "user5", "password": "user5", "wfc": "wfc1", "roles": "[roles1]"}
+        data = {"username": "user5", "email": "user5", "password": "user5", "wfc": "wfc1", "roles": ["role1"]}
         '''
         token = self.get_token().get('auth_token')
         api_route = '/add/user'
