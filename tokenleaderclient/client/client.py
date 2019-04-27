@@ -130,6 +130,7 @@ class Client():
         service_endpoint = self.tl_url + api_route
         headers={'X-Auth-Token': token}
         r = requests.get(service_endpoint, headers=headers, verify=self.ssl_verify)
+        print(r)
         r_dict = json.loads(r.content.decode())
         return r_dict
         		
