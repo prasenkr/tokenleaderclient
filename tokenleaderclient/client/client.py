@@ -124,7 +124,7 @@ class Client():
         	r_dict = {'error': 'could not conect to server , the error is {}'.format(e)}        
         return r_dict
         	    
-#    def list_wfc(self):
+    def list_wfc(self):
         token = self.get_token().get('auth_token')
         api_route = '/list/wfc'
         print(api_route)
