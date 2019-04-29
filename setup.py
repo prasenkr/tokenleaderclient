@@ -6,13 +6,13 @@ def readme():
         return f.read()
 
 
-setup(name='tokenleaderclient',
-      version='0.9',
+setup(name='tokenclient',
+      version='1.6',
       description='Client for token based authentication and role based access control',
       long_description=readme(),
-      url='https://github.com/microservice-tsp-billing/tokenleaderclient',
-      author='Bhujay Kumar Bhatta',
-      author_email='bhujay.bhatta@yahoo.com',
+      url='https://github.com/prasenkr/tokenleaderclient.git',
+      author='Prasen Biswas',
+      author_email='prasenkrb@gmail.com',
       license='Apache Software License',
       packages=find_packages(),
 #       package_data={
