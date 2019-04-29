@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='tokenclient',
-      version='0.2',
+      version='0.3',
       description='Client for token based authentication and role based access control',
       long_description=readme(),
       url='https://github.com/prasenkr/tokenleaderclient.git',
